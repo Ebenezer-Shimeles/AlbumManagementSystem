@@ -2,12 +2,351 @@
 #include <cstdlib> //for memset function
 #include <string>
 #include <cstdio>
+#include <iostream>
 
-#include "searchArtist.h"
-#include "Utils.h"
+
+
 #include "Const.h"
 
 using namespace std;
+void removeArtist(
+                  char artistIds[][8],
+                  char  name[][40], 
+				  char phone[][11],
+				  char email[][80], 
+				  int selectedIdx, 
+				  int & nArtist
+);
+void removeAlbum(
+              char artistIdsRef[][8], 
+			  char albumIds[][8],
+			  char  titles[][80], 
+			  char recordFormats[][20], 
+			  char datePublisheds[][11], 
+			  char paths[][100], int & nAlbum, 
+              int selectedIdx
+);
+void removeArtistAllAlbums(
+             const char artistId[8], 
+			 char artistIdsRefs[][8], 
+			 char albumIds[][8], 
+			 char titles[][80], 
+			 char recordFormats[][20], 
+			 char datePublished[][11], 
+			 char paths[][100],  
+			 int & nAlbum);
+
+void searchArtistById(
+             const char artistIds[][8], 
+			 int nArtist, 
+			 const char targetId[],  
+			 int result[], 
+			 int * noResult
+);
+void searchArtist(
+            const char artistIds[][8], 
+			const char names[][40], 
+			int nArtist, 
+			int result[], 
+			int * noResult
+);
+void searchArtistByName(
+            const char names[][40], 
+			int nArtist, 
+			const char targetName[],  
+			int result[], 
+			int * noResult
+);
+
+void getArtistInfo(
+    char artistId[MAX_ID_LEN],
+	char artistName[MAX_NAME_LEN],
+	char &artistGender,
+	char artistPhoneNumber[PHONE_LEN_MAX], 
+	char artistEmail[MAX_EMAIL_LEN], int nArtist
+);
+void editArtist(
+           const char artistIds[][8], 
+		   char names[][40], 
+		   char genders[], 
+		   char phones[][11], 
+		   char emails[][80], 
+		   int nArtist
+);
+bool editArtistInfo(
+       const char artistId[], 
+	   char name[], 
+	   char &gender, 
+	   char phone[],
+	   char email[]
+);
+bool addArtist(
+           char artistIds[][8], 
+		   char names[][40], 
+		   char genders[], 
+		   char phones[][11], 
+		   char emails[][80], 
+		   int & nArtist
+);
+int selectArtist(
+    const char artistIds[][8], 
+	const char names[][40], 
+	const int result[], 
+	int noResult, 
+	int forWhat 
+);
+void searchArtistByName(
+            const char names[][40], 
+			int nArtist, 
+			const char targetName[],  
+			int result[], 
+			int * noResult
+);
+void displaySearchResult(
+             const char artistIds[][8], 
+			 const char names[][40], 
+			 const char genders[], 
+			 const char phones[][11], 
+			 const char emails[][80], 
+			 int nArtist, 
+			 const int result[], 
+			 int noResult
+);
+void displayAllArtist(
+               const char artistIds[][8], 
+			   const char names[][40], 
+			   const char genders[], 
+			   const char phones[][11], 
+			   const char emails[][80], 
+			   int nArtist
+);
+void displayOneArtist(
+       const char artistId[], 
+	   const char name[], 
+	   char  gender, 
+	   const char phone[], 
+	   const char email[]
+);
+void deleteArtist(
+                  char artistIds[][8], 
+                  char names[][40], 
+				  char genders[], 
+				  char phones[][11], 
+				  char emails[][80], 
+				  char artistIdsRefs[][8], 
+				  char albumIds[][8], 
+				  char titles[][80], 
+				  char recordFormats[][20], 
+				  char datePublished[][11],
+				  char paths[][100],
+				  int & nArtist, 
+				  int & nAlbum
+);
+
+
+
+void deleteArtist(
+                  char artistIds[][8], 
+                  char names[][40], 
+				  char genders[], 
+				  char phones[][11], 
+				  char emails[][80], 
+				  char artistIdsRefs[][8], 
+				  char albumIds[][8], 
+				  char titles[][80], 
+				  char recordFormats[][20], 
+				  char datePublished[][11],
+				  char paths[][100],
+				  int & nArtist, 
+				  int & nAlbum
+)
+{
+    // Responsibility:	Handles delete choice.
+    int result[1000];
+    int noResult;
+    
+    searchArtist(
+            artistIds, 
+			names, 
+			nArtist, 
+			result, 
+			&noResult
+   );
+   //cout << "Here" <<endl;
+   if(noResult == 0){
+   	 cout <<"Nothing found!\a";
+   	exit(0);
+   }
+   cout << endl<<"Number of results : " << noResult<<endl;
+   //exit(0);
+   
+   for(int k=0;k<noResult;k++)
+       cout <<"Found at index: " << k << " Result: " << artistIds[k]<<endl;
+   //ALL FINE UP TO HERE
+
+   displaySearchResult(
+             artistIds, 
+			 names, 
+			 genders, 
+			 phones, 
+			 emails, 
+			 nArtist, 
+			 result, 
+			 noResult);
+   int selectedIdx = selectArtist(
+        artistIds, 
+	    names, 
+	    result, 
+	    noResult, 
+	     2 
+	);
+	cout << "You selected " << selectedIdx;
+	if(selectedIdx > noResult || selectedIdx < 1){
+		cerr << "Err in choice !";
+		exit(-1);
+	}
+	//cout <<"HERE";
+	removeArtistAllAlbums(
+       artistIds[selectedIdx - 1], 
+	   artistIdsRefs, 
+	   albumIds, 
+	   titles, 
+	   recordFormats, 
+	   datePublished, 
+	   paths,  
+	   nAlbum
+	);
+	removeArtist(
+        artistIds, 
+	    names, 
+	    phones,
+	    emails, 
+	    selectedIdx - 1, 
+	    nArtist
+	);
+//	cout <<endl<<"Sure! "<<selectedIdx - 1;
+	
+	cout <<"\nDone!";
+}
+bool testDeleteArtist(){
+	cout << "HELLO";
+}
+
+
+void searchArtist(
+            const char artistIds[][8], 
+			const char names[][40], 
+			int nArtist, 
+			int result[], 
+			int * noResult
+){
+	char choice; 
+	cout << "Searching artist.."<<endl;
+    cout << "Do you want to search by \nA)ID or B)Name:  ";
+    cin >> choice;
+    int results[1000]; // This is where the results are stored
+    //int *numberOfResults;
+    if(choice == 'A' || choice == 'a'){
+    	//Search by Id
+    	char targetId[MAX_ID_LEN] = {};
+    	
+    	cout <<endl << "Input the id please: ";
+    	
+    	cin >>targetId;
+    	cout <<endl<< "The target ID is: "<<targetId<<endl;
+        //*noResult = 10;	
+    	//return;
+    	//all Fine
+    	searchArtistById(
+             artistIds, 
+			 nArtist, 
+			 targetId,  
+			 result, 
+			 noResult
+        );
+        //noResult[0] = 10004;
+        //cout << "Result length search: "<< *noResult << endl;
+        //cout <<"Wait please";
+	}
+	else if(choice == 'B' || choice == 'b'){
+		char targetName[MAX_NAME_LEN];
+		cout <<"Input the prefix name: ";
+		cin >>targetName;
+		searchArtistByName(
+            names, 
+			nArtist, 
+			targetName,  
+			result, 
+			noResult);
+	}
+	else{
+        cerr << "Error in choice!\a";
+        exit(-1);
+    }
+    
+}
+void searchArtistById(
+             const char artistIds[][8], 
+			 int nArtist, 
+			 const char targetId[],  
+			 int result[], 
+			 int * noResult
+){
+	//*noResult = 100;
+	cout << "Searching for " << targetId<<endl;
+	int resLen=0;
+	char tmpStore[8];
+	memset(tmpStore, '\0', 8); //clear the junk
+	
+	for(int i=0;i<nArtist;i++){
+		for(int j=3, k=0;j< MAX_ID_LEN;j++,k++){ //jump 3 because of 'art'  prefix
+			tmpStore[k] = artistIds[i][j];
+			cout <<tmpStore << " vs " <<targetId <<endl;
+            if(strcmp(tmpStore, targetId) == 0){
+            	//cout <<endl<<tmpStore<<" = "<<targetId << "i="<<i<<" j="<<j;
+            	result[resLen] = i;
+            	resLen++;
+            	//cout <<endl<<"Reslen : "<<resLen;
+            	
+            	cout << endl << "Found match: " << artistIds[i] << " & " << targetId<<endl; 
+            	//memset(tmpStore, '\0', 8);
+            	break;
+			}			
+		}
+		memset(tmpStore, '\0', 8);
+	
+		//cout <<" Relen: " <<resLen<<" " <<endl;
+		*noResult = resLen;
+		//cout <<" Relen ptr : " <<*noResult<<" " <<endl;
+	}
+	//cout << "Done searching by ID" <<endl;
+}
+void searchArtistByName(
+            const char names[][40], 
+			int nArtist, 
+			const char targetName[],  
+			int result[], 
+			int * noResult){
+	int resLen=0;
+	char tmpStore[8];
+	for(int i=0;i<nArtist;i++){
+		for(int j=0;j<8;j++){
+			tmpStore[j] = names[i][j];
+            if(strcmp(tmpStore, targetName) == 0){
+            	//cout <<endl<<tmpStore<<" = "<<targetId << "i="<<i<<" j="<<j;
+            	result[resLen] = i;
+            	resLen++;
+            	//cout <<endl<<"Reslen : "<<resLen;
+            	for(int k=0;k<8;k++) tmpStore[k] = '\0';
+            	break;
+			}			
+		}
+		for(int j=0;j<8;j++) tmpStore[j] = '\0';
+		//cout <<" Relen: " <<resLen<<" ";
+		//*noResult = resLen;
+	}
+	*noResult = resLen;
+}
 
 void formatEmail (char email[]){
 	if(email[0] >= 'a') email[0] -= 'a' - 'A';
@@ -165,8 +504,21 @@ void getArtistName (char name[]){
    formatName(name);
 	
 }
-void getArtistInfo(){
-	
+void getArtistInfo(
+    char artistId[MAX_ID_LEN],
+	char artistName[MAX_NAME_LEN],
+	char &artistGender,
+	char artistPhoneNumber[PHONE_LEN_MAX], 
+	char artistEmail[MAX_EMAIL_LEN], int nArtist ){
+		
+	strcpy(artistId, "art");
+	sprintf(artistId+3, "%d", nArtist);    
+    //strcpy(artistId+3, to_string(nArtist).c_str() );
+    
+    getArtistName(artistName);
+    artistGender = getArtistGender();
+    getArtistPhone (artistPhoneNumber);
+    getArtistEmail (artistEmail);
 }
 bool addArtist(
            char artistIds[][8], 
@@ -182,14 +534,13 @@ bool addArtist(
 	char artistPhoneNumber[PHONE_LEN_MAX] = {};
 	char artistEmail[MAX_EMAIL_LEN] = {};
 	
-    strcpy(artistId, "art");
-	sprintf(artistId+3, "%d", nArtist);    
-    //strcpy(artistId+3, to_string(nArtist).c_str() );
-    
-    getArtistName(artistName);
-    artistGender = getArtistGender();
-    getArtistPhone (artistPhoneNumber);
-    getArtistEmail (artistEmail);
+    getArtistInfo(    
+	    artistId,
+        artistName,
+	    artistGender,
+	    artistPhoneNumber, 
+	    artistEmail, nArtist
+	);
     //cout << artistName << " " << artistGender << " "<<artistEmail << " "<<artistPhoneNumber;
     //return true;
     //genders[nArtist] = 'M';
@@ -289,10 +640,11 @@ bool editArtistInfo(
 	   char email[]
 ){
 	char newName[MAX_NAME_LEN] = {}, newGender, newPhone[PHONE_LEN_MAX]={}, newEmail[MAX_EMAIL_LEN] = {};
-	
+	string tmp;
 	cout << endl <<"Enter '-' to skip editing field";
 	cout <<endl << "Input the new name please: ";
-	cin >> newName;
+	getline(cin, tmp);
+	strcpy(newName, tmp.c_str());
 	cout <<endl << "Input the new gender please: ";
 	bool isGoodGender = false;
 	while(!isGoodGender) {
@@ -378,3 +730,122 @@ void editArtist(
 			   emails[selected - 1]
   );
 }
+void removeArtist(
+                  char artistIds[][8],
+                  char  name[][40], 
+				  char phone[][11],
+				  char email[][80], 
+				  int selectedIdx, 
+				  int & nArtist
+){
+    if(nArtist < selectedIdx || selectedIdx < 0){
+		cerr << "Index length greater than data length"<<endl;
+		return;
+	}
+	cout << "Selected Id :" <<selectedIdx<<endl;
+	//Zero out fields to overwrite
+	memset(artistIds[selectedIdx], '\0', MAX_ID_LEN);
+	memset(name[selectedIdx], '\0', MAX_NAME_LEN);
+	memset(phone[selectedIdx], '\0', PHONE_LEN_MAX);
+	memset(email[selectedIdx], '\0', MAX_EMAIL_LEN);
+	
+	if(selectedIdx + 1 == nArtist) //deleting the last one
+	{
+		nArtist--;
+	    return;  //no need to colapse
+	}
+	///if(selectedIdx + 1 == nArtist) return; //IF it is deleteing the last one
+	for(int i=selectedIdx;i<nArtist;i++){ //colpase
+			memset(artistIds[i], '\0', MAX_ID_LEN);
+	        memset(name[i], '\0', MAX_NAME_LEN);
+	        memset(phone[i], '\0', PHONE_LEN_MAX);
+	        memset(email[i], '\0', MAX_EMAIL_LEN);
+	
+		    strcpy(artistIds[i], artistIds[i+1]);
+		    strcpy(name[i], name[i+1]);
+		    strcpy(phone[i], phone[i+1]);
+		    strcpy(email[i], email[i+1]);
+	}
+    nArtist--;
+}
+void removeAlbum(
+              char artistIdsRef[][8], 
+			  char albumIds[][8],
+			  char  titles[][80], 
+			  char recordFormats[][20], 
+			  char datePublisheds[][11], 
+			  char paths[][100], int & nAlbum, 
+              int selectedIdx
+){
+	//cout <<"HI";
+	 if(nAlbum < selectedIdx || selectedIdx < 0){
+		cerr << "Index length greater than data length -Remove ALbum"<<endl;
+		return;
+	}
+	cout << "Deleting Album :" <<selectedIdx<<endl;
+	
+	//Zero out fields to overwrite
+	memset(artistIdsRef[selectedIdx], '\0', MAX_ID_LEN);
+	memset(albumIds[selectedIdx], '\0', MAX_ID_LEN);
+	memset(titles[selectedIdx], '\0',  MAX_TITLE_LEN);
+	memset(datePublisheds[selectedIdx], '\0', DATE_MAX_LEN);
+	//memset(phone[selectedIdx], '\0', PHONE_LEN_MAX);
+	memset(paths[selectedIdx], '\0', MAX_PATH_LEN);
+	
+	if(selectedIdx + 1 == nAlbum) //deleting the last one
+	{
+		nAlbum--;
+	    return;  //no need to colapse
+	}
+	///if(selectedIdx + 1 == nArtist) return; //IF it is deleteing the last one
+	for(int i=selectedIdx;i<nAlbum;i++){ //colpase
+		    memset(artistIdsRef[selectedIdx], '\0', MAX_ID_LEN);
+	        memset(albumIds[selectedIdx], '\0', MAX_ID_LEN);
+	        memset(titles[selectedIdx], '\0',  MAX_TITLE_LEN);
+	        memset(datePublisheds[selectedIdx], '\0', DATE_MAX_LEN);
+	//memset(phone[selectedIdx], '\0', PHONE_LEN_MAX);
+	        memset(paths[selectedIdx], '\0', MAX_PATH_LEN);
+	
+		    strcpy(artistIdsRef[i], artistIdsRef[i+1]);
+		    strcpy(albumIds[i], albumIds[i+1]);
+		    strcpy(titles[i], titles[i+1]);
+		    strcpy(datePublisheds[i], datePublisheds[i+1]);
+	}
+    nAlbum--;
+}
+void removeArtistAllAlbums(
+             const char artistId[8], 
+			 char artistIdsRefs[][8], 
+			 char albumIds[][8], 
+			 char titles[][80], 
+			 char recordFormats[][20], 
+			 char datePublished[][11], 
+			 char paths[][100],  
+			 int & nAlbum)
+{
+	//cout <<"\n SWAE LEE SUNFLOWER" <<endl;
+	int i,cmp;
+	//cout <<"SURE2 "<<artistIdsRefs[0] <<endl;
+   	for( i=0;i<nAlbum;i++){
+   	    cmp = strcmp(artistId, artistIdsRefs[i]);
+   	   	cout <<endl << artistId << " == ";
+		cout << artistIdsRefs[i] << " " << cmp << endl;
+		//continue;
+   	    if(cmp == 0){
+   	    	cout << "Found Match "<<endl;
+   	    	
+   	       removeAlbum(
+              artistIdsRefs, 
+			  albumIds,
+			  titles, 
+			  recordFormats, 
+			  datePublished, 
+			  paths, nAlbum, 
+              i
+           );	
+		}
+   }
+
+		//cout <<"LOOP";
+}
+
