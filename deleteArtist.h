@@ -3,7 +3,9 @@
 #include "Const.h"
 #include "utils.h"
 #include "artist.h"
-#include "searchArtist.h"
+//#include "searchArtist.h"
+#include "removeArtist.h"
+
 
 using namespace std;
 void deleteArtist(
@@ -24,39 +26,69 @@ void deleteArtist(
 {
     // Responsibility:	Handles delete choice.
     int result[1000];
-    int *noResult;
+    int noResult;
     
     searchArtist(
             artistIds, 
 			names, 
 			nArtist, 
 			result, 
-			noResult
+			&noResult
    );
+   //cout << "Here" <<endl;
+   if(noResult == 0){
+   	cout <<"Nothing found!\a";
+   	exit(0);
+   }
+   cout << endl<<"Number of results : " << noResult<<endl;
+   //exit(0);
+   
+   for(int k=0;k<noResult;k++)
+       cout <<"Found at index: " << k << " Result: " << artistIds[k]<<endl;
+   //ALL FINE UP TO HERE
+
+   displaySearchResult(
+             artistIds, 
+			 names, 
+			 genders, 
+			 phones, 
+			 emails, 
+			 nArtist, 
+			 result, 
+			 noResult);
    int selectedIdx = selectArtist(
-    artistIds, 
-	names, 
-	result, 
-	*noResult, 
-	2 );
-	
-	removeArtist(
-    artistIds, 
-	names, 
-	phones,
-	emails, 
-	selectedIdx, 
-	nArtist);
-	
+        artistIds, 
+	    names, 
+	    result, 
+	    noResult, 
+	     2 
+	);
+	cout << "You selected " << selectedIdx;
+	if(selectedIdx > noResult || selectedIdx < 1){
+		cerr << "Err in choice !";
+		exit(-1);
+	}
+	//cout <<"HERE";
 	removeArtistAllAlbums(
-       artistIds[selectedIdx], 
+       artistIds[selectedIdx - 1], 
 	   artistIdsRefs, 
 	   albumIds, 
 	   titles, 
 	   recordFormats, 
 	   datePublished, 
 	   paths,  
-	   nAlbum);
+	   nAlbum
+	);
+	removeArtist(
+        artistIds, 
+	    names, 
+	    phones,
+	    emails, 
+	    selectedIdx - 1, 
+	    nArtist
+	);
+//	cout <<endl<<"Sure! "<<selectedIdx - 1;
+	
 	cout <<"\nDone!";
 }
 bool testDeleteArtist(){
