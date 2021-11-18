@@ -4,13 +4,310 @@
 #include <cstring>
 
 #include "artist.h"
+#include "album.h"
 #include "Const.h"
 
 using namespace std;
 
 int viewArtistMenu(){
+	int choice = 100;
+	cout << "Please choose one:";
+	cout << "\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice: ";
+	bool tmp;
+	do{
+		cin >>choice;
+		tmp = choice >5 || choice < 1;
+		if(tmp) cerr << endl <<"Error in choice please retry" <<endl;
+	}while(tmp);
+	return choice;
+}
+bool albumEditor(
+         const char artistIds[][8], 
+		 const char artistNames[][40], 
+		 int nArtist, 
+		 char artistIdsRef[][8], 
+		 char albumIds[][MAX_ID_LEN], 
+		 char titles[][80], 
+		 char recordFormats[][MAX_FORMAT_LEN], 
+		 char datePublisheds[][11], 
+		 char paths[][100],
+		  int & nAlbum
+){
+	//"\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice";
+	switch(viewArtistMenu()){
+		case 1:{
+			//add
+			bool suc = addAlbum(
+			       artistIds, 
+			       artistNames,
+			       nArtist, 
+				   artistIdsRef,
+			       albumIds,
+			       titles,
+			       recordFormats,
+				   datePublisheds, 
+				   paths, 
+			       nAlbum
+			);
+			if(!suc) cerr << "Adding album failed!";
+			break;
+		}
+		case 2:{
+			//edit
+			/*
+			editAlbum(
+    const char artistIds[][8], 
+	const char artistNames[][40], 
+	int nArtist, 
+	char artistIdsRef[][8], 
+	char albumIds[][10], 
+	char titles[][80], 
+	char recordFormats[][12], 
+	char datePublisheds[][11], 
+	char paths[][100], 
+	int nAlbum
+			*/
+			editAlbum(
+			       artistIds, 
+			       artistNames,
+			       nArtist, 
+				   artistIdsRef,
+			       albumIds,
+			       titles,
+			       recordFormats,
+				   datePublisheds, 
+				   paths, 
+			       nAlbum
+			); 
+			break;
+		}
+		case 3:{
+			//delete
+			 deleteAlbum(	 
+			       artistIds, 
+			       artistNames,
+			       nArtist, 
+				   artistIdsRef,
+			       albumIds,
+			       titles,
+			       recordFormats,
+				   datePublisheds, 
+				   paths, 
+			       nAlbum
+			 );
+			break;
+		}
+		case 4:{
+			//back
+			return false;
+			break;
+		}
+		case 5:{
+			//exit
+			exit(0);
+			break;
+		}
+		
+	}
+}
+void displaSearchAlbumResult(
+       //const char artistIdsRef[][8],
+	   const char albumIds[][8], 
+	   const char titles[][80], 
+	   const char recordFormats[][20], 
+	   const char datePublisheds[][11], 
+	   const char paths[][100],
+       int results[], 
+	   int noResult
+){
+	if(!noResult) cout <<endl<< "The artist has no albums"<<endl;
+	for(int i=0;i<noResult;i++){
+	
+	    int albumIndex = results[i];
+	    cout <<endl << "["<< i+1 << ") Title: " << titles[albumIndex] << "Album Id:  "<< albumIds[albumIndex]<<endl;
+		cout  <<"\t Date Published: "<< datePublisheds[albumIndex] << " Path:";
+		cout  << paths[albumIndex]<<" record format: "<<recordFormats[albumIndex] << "]"<<endl;
+   }
+
+} 
+void viewArtistAlbumsBySearch(
+       const char artistIds[][8], 
+	   const char artistNames[][40], 
+	   int nArtist, 
+	   const char artistIdsRef[][8],
+	   const char albumIds[][8], 
+	   const char titles[][80], 
+	   const char recordFormats[][20], 
+	   const char datePublisheds[][11], 
+	   const char paths[][100], 
+	   int  nAlbum
+){
+	int result[1000];
+	int noResult;
+	 searchArtist(
+            artistIds, 
+			artistNames, 
+			nArtist, 
+		    result, 
+			&noResult
+    );
+    int selectedIdx = selectArtist(
+        artistIds, 
+	    artistNames, 
+	    result, 
+	    noResult, 
+	     0 
+	);
+	searchAlbumByArtistId(
+              artistIdsRef, 
+			   nAlbum, 
+			   artistIds[selectedIdx], //must contain art 
+			   result,
+			   &noResult
+    );
+}
+int albumMenu(){
+	int choice = 100;
+	
+	cout << "\n\t1)View Artist Albums\n\t2)Edit Artist Album\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
+	bool tmp;
+	do{
+		cin >> choice;
+	    tmp = choice > 4 || choice < 0;
+		if(tmp) cerr << "Error! in choice retry!\a\n";
+	}while(tmp);
+	return choice;
+}
+
+int viewAlbumMenu(){
+	int choice = 100;
+    cout <<"Please choice one";
+	cout << "\n\t1)Display All Album\n\2)View Album By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
+	bool tmp;
+	do{
+		cin >> choice;
+		tmp = choice > 4 || choice < 0;
+		if(tmp) cerr << "Error! in choice retry!\a\n";
+	}while(tmp);
+	return choice;
+}
+bool albumViewer(
+       const char artistIds[][8], 
+	   const char artistNames[][40], 
+	   int nArtist, 
+	   const char artistIdsRef[][8],
+	   const char albumIds[][8], 
+	   const char titles[][80], 
+	   const char recordFormats[][20], 
+	   const char datePublisheds[][11], 
+	   const char paths[][100], 
+	   int  nAlbum
+){
+	int choice = viewAlbumMenu();
+	switch(choice){
+		case 1:{
+			char id[MAX_ID_LEN]={};
+			cout << "Please input the artis's Id:   ";
+			cin >>id;
+            displayAllAlbums( 
+               id, 
+		       artistNames, 
+		       artistIdsRef, 
+		       albumIds, 
+		       titles, 
+		       recordFormats, 
+		       datePublisheds, 
+		       paths, 
+               nAlbum
+			);			
+			break;
+		}
+		case 2:{
+			viewArtistAlbumsBySearch(
+                artistIds, 
+	            artistNames, 
+	            nArtist, 
+	            artistIdsRef,
+	            albumIds, 
+	            titles, 
+	            recordFormats, 
+	            datePublisheds, 
+	            paths,
+	            nAlbum
+            );
+            system("pause");
+			break;
+		}
+		case 3:{
+			return false;
+			break;
+		}
+		case 4:{
+			exit(0);
+			break;
+		}
+	}
+}
+bool albumManager(
+             const char artistIds[][8],
+			 const char artistNames[][40], 
+			 int nArtist, char artistIdsRef[][8], 
+			 char albumIds[][8], 
+			 char titles[][80],
+			 char recordFormats[][20],
+			 char datePublisheds[][11],
+			 char paths[][100], 
+             int & nAlbum
+){
+	cout << "ALbum manager\n";
+	int choice = albumMenu();
+	switch(choice){
+		case 1:{
+			//album viewer
+			return  albumViewer(
+                artistIds, 
+	            artistNames, 
+	            nArtist,    
+	            artistIdsRef,
+	            albumIds, 
+	            titles, 
+	            recordFormats, 
+	            datePublisheds, 
+	            paths, 
+	            nAlbum
+             );
+			break;
+		}
+		case 2:{
+			//alubum editor
+			return albumEditor(
+                artistIds, 
+	            artistNames, 
+	            nArtist,    
+	            artistIdsRef,
+	            albumIds, 
+	            titles, 
+	            recordFormats, 
+	            datePublisheds, 
+	            paths, 
+	            nAlbum
+           ); 
+			break;
+		}
+		case 3:{
+			return false;
+			break;
+		}
+		case 4:{
+			exit(0);
+			break;
+		}
+	}
+}
+
+int viewAlbMenu(){ //some
 	int choice;
-	cout << "\n\t0)Add add artist 1)\n\tEdit Artist2)\n\tDelete Artist3)\n\tBack To Main Menu\n\t4)Exit\nYour choice: ";
+	cout << "\n\t0)Add add artist\n\t1)Edit Artist2)\n\tDelete Artist3)\n\tBack To Main Menu\n\t4)Exit\nYour choice: ";
 	
 	do{
 	   cin >>choice;
@@ -277,7 +574,38 @@ void mainManager(
 	        nAlbum
       );
 	}
-	else if(choice == 2); //mamnage album
+	else if(choice == 2){
+		bool choice = albumManager(
+             artistIds,
+			 names, 
+			 nArtist, 
+			 artistIdsRefs, 
+			 albumIds, 
+			 titles,
+			 recordFormats,
+			 datePublished,
+			 paths, 
+             nAlbum
+       );
+       if(choice){
+       	system("cls");
+       	mainManager(
+            artistIds, 
+	        names, 
+	        genders, 
+	        phones,
+            emails, 
+	        artistIdsRefs, 
+	        albumIds,
+	        titles,
+	        recordFormats,
+	        datePublished,
+	        paths,
+            nArtist,
+	        nAlbum
+        );
+	   }
+	}
 	else if(choice == 3) exit(0);
 }
 

@@ -605,7 +605,8 @@ int selectArtist(
 	int forWhat 
 ){
     //cout << "MMA "<<noResult << " ";
-	if(forWhat == 2) cout <<"Please select a specific artist to deleted: "<<endl;
+    if(!forWhat) cout <<"Please select a specific artist:"<<endl; 
+	else if(forWhat == 2) cout <<"Please select a specific artist to deleted: "<<endl;
     else if(forWhat == 1) cout << "Please select a specific artist to be edited: "<<endl;
 	cout <<endl;
 	int res;
