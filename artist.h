@@ -175,7 +175,7 @@ void deleteArtist(
    //cout << "Here" <<endl;
    if(noResult == 0){
    	 cout <<"Nothing found!\a";
-   	exit(0);
+   	 //farewell();
    }
    cout << endl<<"Number of results : " << noResult<<endl;
    //exit(0);
@@ -242,6 +242,7 @@ void searchArtist(
 ){
 	char choice; 
 	cout << "Searching artist.."<<endl;
+	l:
     cout << "Do you want to search by \nA)ID or B)Name:  ";
     cin >> choice;
     int results[1000]; // This is where the results are stored
@@ -281,7 +282,8 @@ void searchArtist(
 	}
 	else{
         cerr << "Error in choice!\a";
-        exit(-1);
+        goto l;
+		//exit(-1);
     }
     
 }
@@ -328,10 +330,11 @@ void searchArtistByName(
 			int result[], 
 			int * noResult){
 	int resLen=0;
-	char tmpStore[8];
+	char tmpStore[8] = {};
 	for(int i=0;i<nArtist;i++){
 		for(int j=0;j<8;j++){
 			tmpStore[j] = names[i][j];
+			cout << tmpStore << " vs " << targetName <<endl;
             if(strcmp(tmpStore, targetName) == 0){
             	//cout <<endl<<tmpStore<<" = "<<targetId << "i="<<i<<" j="<<j;
             	result[resLen] = i;
@@ -346,6 +349,7 @@ void searchArtistByName(
 		//*noResult = resLen;
 	}
 	*noResult = resLen;
+	cout << *noResult;
 }
 
 void formatEmail (char email[]){

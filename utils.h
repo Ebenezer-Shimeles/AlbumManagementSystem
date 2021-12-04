@@ -9,10 +9,14 @@
 
 using namespace std;
 
+void farewell (){
+	cout <<"\nGoodbye!\n";
+	exit(0);
+}
 int viewArtistMenu(){
 	int choice = 100;
 	cout << "Please choose one:";
-	cout << "\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice: ";
+	cout << "\n\t1)Display All Artist\n\t2)View Artist By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
 	bool tmp;
 	do{
 		cin >>choice;
@@ -104,7 +108,7 @@ bool albumEditor(
 		}
 		case 5:{
 			//exit
-			exit(0);
+			farewell();
 			break;
 		}
 		
@@ -243,7 +247,7 @@ bool albumViewer(
 			break;
 		}
 		case 4:{
-			exit(0);
+			farewell();
 			break;
 		}
 	}
@@ -299,7 +303,7 @@ bool albumManager(
 			break;
 		}
 		case 4:{
-			exit(0);
+			farewell();
 			break;
 		}
 	}
@@ -347,14 +351,19 @@ void viewArtistBySearch(
    );  	
 }
 int mainMenu(){
-   cout <<" Please Select your choice \n\t1) Manage Artist, \n\t2)Manage Album \n\t3)Exit\nYour Choice:";	
+   cout <<" Please Select your choice\n\t1)Manage Artist\n\t2)Manage Album\n\t3)Exit\nYour Choice:";	
 }
 
 int artistMenu(){
 	int choice = 100;
 	cout << "Please choose one\n";
 	cout << "\t1)View Artist\n\t2)Edit Artist\n\t3)Back To Main Menu\n\t4)Exit\nYour choice:";
-	cin>>choice;
+	do{
+        
+    	cin>>choice;
+        bool isValid = choice > 4 || choice < 1;
+        if(!isValid) cerr<<endl<<"Error in input please reenter!\a:";
+	}while(!isValid)
 	return choice;
 }
 
@@ -399,9 +408,12 @@ bool artistViewer(
 		system("cls");
 	    return false;
 	}
-	else if(choice == 4) exit(0);
+	else if(choice == 4) farewell();
 }
-
+int editArtistMenu(){
+	int choice;
+	cout << "Edit Artist, Delete Artist, Back To Main Menu, Exit\nYour choice:"
+}
 bool artistEditor(
          char artistIds[][8], 
 		 char names[][40], 
@@ -418,7 +430,7 @@ bool artistEditor(
 		 int & nAlbum
 ){
 	//
-	int choice = viewArtistMenu();
+	int choice = editArtistMenu();
 	if(choice == 0){
 		addArtist(
            artistIds, 
@@ -482,6 +494,7 @@ bool artistManager(
 {
 	int choice = artistMenu();
 	if(choice == 1){
+		cout << "View Artist chooosen!" <<endl;
 		artistViewer(
            artistIds, 
 		   names,  
@@ -507,14 +520,14 @@ bool artistManager(
 		 nArtist, 
 		 nAlbum
         );
-		if(!choice )exit(0);
+		if(!choice ) return false;
 	}
 	else if(choice == 3)
 	{
 		system("cls");
         return false;
 	}
-	else if(choice ==4) exit(0);
+	else if(choice ==4) farewell();
 }
 void mainManager(
     char artistIds[][8], 
@@ -531,6 +544,9 @@ void mainManager(
     int & nArtist,
 	int & nAlbum
 ){
+	
+	system("pause"); //change to timeout 5
+	system("cls");
 	mainMenu();
 	int choice=10;
 	do{
@@ -606,12 +622,10 @@ void mainManager(
         );
 	   }
 	}
-	else if(choice == 3) exit(0);
+	else if(choice == 3) farewell();
 }
 
-void farewell (){
-	cout <<"\nGoodbye!\n";
-}
+
 void loadAlbum(
       char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN], // This so because every arist can have 10 albums on average. 
     char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN],
