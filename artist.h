@@ -492,9 +492,10 @@ void getArtistName (char name[]){
 	bool isValid = false;
 	while(!isValid){
 		//cout << "isValid " <<isValid;
-	    string str;
+	    std::string str;
 	    char tmpName[MAX_NAME_LEN] = {};
 	    cout << "\nPlease input the artist Name\n";
+	    cin.ignore();  //Since we get things in a stream we need to ignore the new lines transmited
 	    getline(cin,str);
 	    memcpy(tmpName, str.c_str(), str.size());
 	    //cout << "Tmp Name " <<tmpName;
@@ -609,7 +610,11 @@ int selectArtist(
 	int forWhat 
 ){
     //cout << "MMA "<<noResult << " ";
-    if(!forWhat) cout <<"Please select a specific artist:"<<endl; 
+    if(forWhat == 0){
+	   cout <<"Please select a specific artist:"<<endl;
+	   for(int i=0;i<noResult;i++)
+	      cout << i + 1 << ") Name: " << names[i] << " Id " << artistIds[i] <<endl;
+    }
 	else if(forWhat == 2) cout <<"Please select a specific artist to deleted: "<<endl;
     else if(forWhat == 1) cout << "Please select a specific artist to be edited: "<<endl;
 	cout <<endl;

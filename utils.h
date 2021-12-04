@@ -25,6 +25,17 @@ int viewArtistMenu(){
 	}while(tmp);
 	return choice;
 }
+int editAlbumMenu(){
+	cout << "Choose one please\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice:";
+	int choice;
+	bool isValid = false;
+	do{
+		cin >> choice;
+		isValid = choice <=5 && choice >=1;
+		if(!isValid) cerr << "\nError in choice retry\a: ";
+	}while(!isValid);
+	return choice;
+}
 bool albumEditor(
          const char artistIds[][8], 
 		 const char artistNames[][40], 
@@ -38,7 +49,7 @@ bool albumEditor(
 		  int & nAlbum
 ){
 	//"\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice";
-	switch(viewArtistMenu()){
+	switch(editAlbumMenu()){
 		case 1:{
 			//add
 			bool suc = addAlbum(
@@ -54,23 +65,11 @@ bool albumEditor(
 			       nAlbum
 			);
 			if(!suc) cerr << "Adding album failed!";
-			break;
+		    return true;
 		}
 		case 2:{
 			//edit
-			/*
-			editAlbum(
-    const char artistIds[][8], 
-	const char artistNames[][40], 
-	int nArtist, 
-	char artistIdsRef[][8], 
-	char albumIds[][10], 
-	char titles[][80], 
-	char recordFormats[][12], 
-	char datePublisheds[][11], 
-	char paths[][100], 
-	int nAlbum
-			*/
+		
 			editAlbum(
 			       artistIds, 
 			       artistNames,
@@ -83,7 +82,7 @@ bool albumEditor(
 				   paths, 
 			       nAlbum
 			); 
-			break;
+			return true;
 		}
 		case 3:{
 			//delete
@@ -99,17 +98,16 @@ bool albumEditor(
 				   paths, 
 			       nAlbum
 			 );
-			break;
+			return true;
 		}
 		case 4:{
 			//back
-			return false;
-			break;
+			return true;
+			//break;
 		}
 		case 5:{
 			//exit
-			farewell();
-			break;
+			return false;
 		}
 		
 	}
@@ -147,14 +145,16 @@ void viewArtistAlbumsBySearch(
 	   int  nAlbum
 ){
 	int result[1000];
-	int noResult;
-	 searchArtist(
+	int noResult = 0;
+	searchArtist(
             artistIds, 
 			artistNames, 
 			nArtist, 
 		    result, 
 			&noResult
     );
+    cout << "No res "<<noResult<<endl;
+    if(noResult == 0 ) return; //works! 
     int selectedIdx = selectArtist(
         artistIds, 
 	    artistNames, 
@@ -162,12 +162,24 @@ void viewArtistAlbumsBySearch(
 	    noResult, 
 	     0 
 	);
+
 	searchAlbumByArtistId(
               artistIdsRef, 
 			   nAlbum, 
-			   artistIds[selectedIdx], //must contain art 
+			   artistIds[selectedIdx - 1], //must contain art 
 			   result,
 			   &noResult
+    );
+    
+    displaSearchAlbumResult(
+       //const char artistIdsRef[][8],
+	   albumIds, 
+	   titles, 
+	   recordFormats, 
+	   datePublisheds, 
+	   paths,
+       result, 
+	   noResult
     );
 }
 int albumMenu(){
@@ -186,7 +198,7 @@ int albumMenu(){
 int viewAlbumMenu(){
 	int choice = 100;
     cout <<"Please choice one";
-	cout << "\n\t1)Display All Album\n\2)View Album By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
+	cout << "\n\t1)Display All Album\n\t2)View Album By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
 	bool tmp;
 	do{
 		cin >> choice;
@@ -223,8 +235,10 @@ bool albumViewer(
 		       datePublisheds, 
 		       paths, 
                nAlbum
-			);			
-			break;
+			);
+			//system("pause");
+			return true; //back to main menu			
+		
 		}
 		case 2:{
 			viewArtistAlbumsBySearch(
@@ -239,17 +253,19 @@ bool albumViewer(
 	            paths,
 	            nAlbum
             );
-            system("pause");
-			break;
+            //system("pause");
+			return true; //back to main menu
 		}
 		case 3:{
-			return false;
-			break;
+			return true; //back to main menu
+			//break;
 		}
 		case 4:{
-			farewell();
-			break;
+			return false;
+			//farewell();
+			//break;
 		}
+		
 	}
 }
 bool albumManager(
@@ -280,7 +296,7 @@ bool albumManager(
 	            paths, 
 	            nAlbum
              );
-			break;
+		//	return true;
 		}
 		case 2:{
 			//alubum editor
@@ -295,16 +311,17 @@ bool albumManager(
 	            datePublisheds, 
 	            paths, 
 	            nAlbum
-           ); 
-			break;
+           ) ;// cerr << "Edditing Failed!\a\n"; 
+			//return true;
 		}
 		case 3:{
-			return false;
-			break;
+			return true;
+			//break;
 		}
 		case 4:{
-			farewell();
-			break;
+			return false;
+			//farewell();
+			//break;
 		}
 	}
 }
@@ -358,12 +375,13 @@ int artistMenu(){
 	int choice = 100;
 	cout << "Please choose one\n";
 	cout << "\t1)View Artist\n\t2)Edit Artist\n\t3)Back To Main Menu\n\t4)Exit\nYour choice:";
+    bool isValid;
 	do{
         
     	cin>>choice;
-        bool isValid = choice > 4 || choice < 1;
+        isValid = choice <= 4 || choice >= 1;
         if(!isValid) cerr<<endl<<"Error in input please reenter!\a:";
-	}while(!isValid)
+	}while(!isValid);
 	return choice;
 }
 
@@ -405,14 +423,22 @@ bool artistViewer(
 
 	}
 	else if(choice == 3){
-		system("cls");
+		//system("cls");
 	    return false;
 	}
 	else if(choice == 4) farewell();
 }
 int editArtistMenu(){
 	int choice;
-	cout << "Edit Artist, Delete Artist, Back To Main Menu, Exit\nYour choice:"
+	cout << "\n\t0)Add artist\n\t1)Edit Artist\n\t2)Delete Artist\n\t3)Back To Main Menu\n\t4)Exit\nYour choice:";
+	bool isValid = false;
+	do{
+		
+		cin >> choice;
+		isValid = choice <= 4 && choice >=0;
+		if(!isValid) cerr << "Error in chooice please retry!\a:";
+	}while(!isValid);
+	return choice;
 }
 bool artistEditor(
          char artistIds[][8], 
@@ -469,10 +495,10 @@ bool artistEditor(
        );
 	}
 	else if(choice == 3){
-		return true; //PLEASE FIX THIS
+		return false; //PLEASE FIX THIS
 	}
 	else if(choice == 4){
-		return false;
+		farewell();
 	}
 }
 
@@ -524,7 +550,7 @@ bool artistManager(
 	}
 	else if(choice == 3)
 	{
-		system("cls");
+		//system("cls");
         return false;
 	}
 	else if(choice ==4) farewell();
@@ -603,8 +629,8 @@ void mainManager(
 			 paths, 
              nAlbum
        );
-       if(choice){
-       	system("cls");
+       if(choice){ //choice 3 => mainmanager return true or choice 4=> farewell =>exit
+       	//system("cls");
        	mainManager(
             artistIds, 
 	        names, 
@@ -621,6 +647,7 @@ void mainManager(
 	        nAlbum
         );
 	   }
+	   else farewell();
 	}
 	else if(choice == 3) farewell();
 }
