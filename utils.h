@@ -162,7 +162,7 @@ void viewArtistAlbumsBySearch(
 	    noResult, 
 	     0 
 	);
-
+   if(selectedIdx == -1) return;
 	searchAlbumByArtistId(
               artistIdsRef, 
 			   nAlbum, 
@@ -655,14 +655,24 @@ void mainManager(
 
 
 void loadAlbum(
-      char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN], // This so because every arist can have 10 albums on average. 
+    char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN], // This so because every arist can have 10 albums on average. 
     char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN],
     char albumTitles[NUMBER_OF_ARTIST_MAX * 10][MAX_TITLE_LEN],
     char albumFormats[NUMBER_OF_ARTIST_MAX * 10][MAX_FORMAT_LEN],
     char albumPublishedDates[NUMBER_OF_ARTIST_MAX * 10][DATE_MAX_LEN],
+    char albumPaths[NUMBER_OF_ARTIST_MAX * 10][MAX_PATH_LEN],
 	int nAlbums 
 ){
 	cout << "Loading albums\n";
+	sortAlbum(
+          albumOwnerIds, 
+		  albumIds, 
+		  albumTitles, 
+		  albumFormats, 
+		  albumPublishedDates, 
+		  albumPaths,  
+		  nAlbums
+   );
 }
 void loadArtists(
              char artistIds[][8], 
@@ -713,6 +723,7 @@ void loading(
        titles,
        recordFormats,
        datePublished,
+       paths,
 	   nAlbum 
     );
 }

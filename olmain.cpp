@@ -11,7 +11,7 @@
 int nArtist=0, nAlbum=0;
 
 int main(int argc, char** argv) {
-	//int x = 100;
+	//int x = 100;rr
 	//change(x);
 	//cout <<x;
 
@@ -21,17 +21,16 @@ int main(int argc, char** argv) {
     char artistGenders[NUMBER_OF_ARTIST_MAX] = {};
     char artistEmails[MAX_EMAIL_LEN][MAX_EMAIL_LEN]={};
 
-    char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {"alb1"}; // This so because every arist can have 10 albums on average. 
-    char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {"art0"};
-    char albumTitles[NUMBER_OF_ARTIST_MAX * 10][MAX_TITLE_LEN] = {"Baby"};
-    char albumFormats[NUMBER_OF_ARTIST_MAX * 10][MAX_FORMAT_LEN] ={"CD"};
-    char albumPublishedDates[NUMBER_OF_ARTIST_MAX * 10][DATE_MAX_LEN] = {"11/11/11"};
+    char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {}; // This so because every arist can have 10 albums on average. 
+    char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {};
+    char albumTitles[NUMBER_OF_ARTIST_MAX * 10][MAX_TITLE_LEN] = {};
+    char albumFormats[NUMBER_OF_ARTIST_MAX * 10][MAX_FORMAT_LEN] ={};
+    char albumPublishedDates[NUMBER_OF_ARTIST_MAX * 10][DATE_MAX_LEN] = {};
     //char dummy;
-    char albumPaths[1000][MAX_PATH_LEN] = {"C:\\", "D:\\"};
+    char albumPaths[1000][MAX_PATH_LEN] = {};
     //cout <<"HI";testDeleteArtist();
     //cout << "nArtist " <<nArtist<<endl;
-    
-    nAlbum++;
+  
     welcome();
     loading(
 	              artistIds, 

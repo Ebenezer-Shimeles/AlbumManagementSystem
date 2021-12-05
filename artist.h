@@ -257,6 +257,7 @@ void deleteArtist(
 	    noResult, 
 	     2 
 	);
+	if(selectedIdx == -1) return;
 	cout << "You selected " << selectedIdx;
 	if(selectedIdx > noResult || selectedIdx < 1){
 		cerr << "Err in choice !";
@@ -676,6 +677,10 @@ int selectArtist(
 	int forWhat 
 ){
     //cout << "MMA "<<noResult << " ";
+    if(noResult == 0){
+		cerr << "No results with this Id found!\n";
+		return -1;
+	}
     if(forWhat == 0){
 	   cout <<"Please select a specific artist:"<<endl;
 	   for(int i=0;i<noResult;i++)
@@ -686,10 +691,7 @@ int selectArtist(
 	cout <<endl;
 	int res;
 	cin>>res;
-	if(result == 0){
-		cerr << "No results with this Id found!";
-		return -1;
-	}
+	
 	return res;
 }
 
@@ -762,7 +764,7 @@ bool editArtistInfo(
 
 }
 void editArtist(
-           const char artistIds[][8], 
+           char artistIds[][8], 
 		   char names[][40], 
 		   char genders[], 
 		   char phones[][11], 
@@ -796,6 +798,7 @@ void editArtist(
 	noResult, 
 	1 
   );
+  if(selected == -1) return;
   char g = 'A';
   editArtistInfo(
                artistIds[selected - 1], 
@@ -806,6 +809,15 @@ void editArtist(
 			   phones[selected - 1 ], 
 			   emails[selected - 1]
   );
+  sortArtist(
+    artistIds,
+    names,
+    genders,
+    phones,
+    emails,
+    nArtist
+  );
+
 }
 void removeArtist(
                   char artistIds[][8],

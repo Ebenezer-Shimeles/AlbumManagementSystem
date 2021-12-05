@@ -4,6 +4,58 @@
 #include "Const.h"
 
 using namespace std;
+
+
+void sortAlbum(
+          char artistIdRefs[][MAX_ID_LEN], 
+		  char albumIds[][MAX_ID_LEN], 
+		  char titles[][MAX_TITLE_LEN], 
+		  char recordFormats[][MAX_FORMAT_LEN], 
+		  char datePublished[][DATE_MAX_LEN], 
+		  char paths[][MAX_PATH_LEN],  
+		  int nAlbum
+){
+   char tempAlbumId[MAX_ID_LEN] ={};
+   char tempRefId[MAX_ID_LEN] = {};
+   char tempTitle[MAX_TITLE_LEN] ={};
+   char tempFormat[MAX_FORMAT_LEN] = {};
+   char tempDate[DATE_MAX_LEN] ={};
+   char tempPath[MAX_PATH_LEN];
+   int i, j;
+
+    for(i=0;i<nAlbum;i++)  
+    for(j=1; j<nAlbum; j++)
+    {
+        if(stricmp(artistIdRefs[j-1], artistIdRefs[j])>0)
+        {
+        	strcpy( tempPath,  paths[j-1]);
+            strcpy( paths[j-1],  paths[j]);
+            strcpy( paths[j], tempPath);
+            
+            strcpy( tempDate,  datePublished[j-1]);
+            strcpy( datePublished[j-1],  datePublished[j]);
+            strcpy( datePublished[j], tempDate);
+            
+            strcpy(tempAlbumId, albumIds[j-1]);
+            strcpy(albumIds[j-1], albumIds[j]);
+            strcpy(albumIds[j], tempAlbumId);
+
+
+            strcpy(tempRefId, artistIdRefs[j-1]);
+            strcpy(artistIdRefs[j-1], artistIdRefs[j]);
+            strcpy(artistIdRefs[j], tempRefId);
+
+      
+            strcpy( tempTitle,  titles[j-1]);
+            strcpy( titles[j-1],  titles[j]);
+            strcpy( titles[j], tempTitle);
+
+            strcpy( tempFormat,  recordFormats[j-1]);
+            strcpy( recordFormats[j-1],  recordFormats[j]);
+            strcpy( recordFormats[j], tempFormat);            
+		}
+    }
+}
 void searchAlbumByArtistId(
                const char artistIdsRefs[][8], 
 			   int nAlbum, 
@@ -63,6 +115,10 @@ void deleteAlbum(
 	    noResult, 
 	     0 
 	);
+	if(selectedIdx == -1) {
+		
+		return;
+	}
 	int result2[100] ={};
 	searchAlbumByArtistId(
               artistIdsRef, 
@@ -175,6 +231,7 @@ bool addAlbum(
 	    noResult, 
 	     0 
 	);
+	if(selectedIdx == -1) return false;
 	char albumTitle[MAX_TITLE_LEN] = {};
 	char format[MAX_FORMAT_LEN] = {};
 	char datePublished[DATE_MAX_LEN] = {};
@@ -374,6 +431,7 @@ void editAlbum(
 	    noResult, 
 	     0 
 	);
+	if(selectedIdx == -1) return;
 	int res2[1000]={};
 	searchAlbumByArtistId(
               artistIdsRef, 
