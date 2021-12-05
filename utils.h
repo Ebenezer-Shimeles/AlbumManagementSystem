@@ -223,10 +223,9 @@ bool albumViewer(
 	switch(choice){
 		case 1:{
 			char id[MAX_ID_LEN]={};
-			cout << "Please input the artis's Id:   ";
-			cin >>id;
-            displayAllAlbums( 
-               id, 
+	
+            displayAllAlbum( 
+              
 		       artistNames, 
 		       artistIdsRef, 
 		       albumIds, 
@@ -574,17 +573,19 @@ void mainManager(
 	system("pause"); //change to timeout 5
 	system("cls");
 	mainMenu();
-	int choice=10;
+	char choice;
+	bool isValid;
 	do{
 	    
 	    cin >> choice;
-	    if(choice > 3 || choice < 1){
+	  isValid = choice == '1' || choice == '2' || choice == '3';
+	    if(!isValid){
 		    cerr <<endl<<"Error in choice Please retry!\a\n";
 	    }
     }
-	while(choice > 3 || choice < 1);
+	while(!isValid);
 	
-	if(choice == 1){
+	if(choice == '1'){
 	   if(!artistManager(
           artistIds, 
 	      names,
@@ -616,7 +617,7 @@ void mainManager(
 	        nAlbum
       );
 	}
-	else if(choice == 2){
+	else if(choice == '2'){
 		bool choice = albumManager(
              artistIds,
 			 names, 
@@ -649,7 +650,7 @@ void mainManager(
 	   }
 	   else farewell();
 	}
-	else if(choice == 3) farewell();
+	else if(choice == '3') return;
 }
 
 

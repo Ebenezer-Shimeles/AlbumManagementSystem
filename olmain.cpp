@@ -15,22 +15,24 @@ int main(int argc, char** argv) {
 	//change(x);
 	//cout <<x;
 
-    char artistNames[NUMBER_OF_ARTIST_MAX][MAX_NAME_LEN] = {};
-    char artistIds[NUMBER_OF_ARTIST_MAX][ MAX_ID_LEN] = {};
-    char artistPhoneNumbers[NUMBER_OF_ARTIST_MAX][PHONE_LEN_MAX] = {};
-    char artistGenders[NUMBER_OF_ARTIST_MAX] = {};
-    char artistEmails[MAX_EMAIL_LEN][MAX_EMAIL_LEN]={};
+    char artistNames[NUMBER_OF_ARTIST_MAX][MAX_NAME_LEN] = {"Yaba Jaba"};
+    char artistIds[NUMBER_OF_ARTIST_MAX][ MAX_ID_LEN] = {"art0"};
+    char artistPhoneNumbers[NUMBER_OF_ARTIST_MAX][PHONE_LEN_MAX] = {"Happy"};
+    char artistGenders[NUMBER_OF_ARTIST_MAX] = {'M'};
+    char artistEmails[MAX_EMAIL_LEN][MAX_EMAIL_LEN]={"S@s.com"};
 
-    char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {}; // This so because every arist can have 10 albums on average. 
-    char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {};
-    char albumTitles[NUMBER_OF_ARTIST_MAX * 10][MAX_TITLE_LEN] = {};
-    char albumFormats[NUMBER_OF_ARTIST_MAX * 10][MAX_FORMAT_LEN] ={};
-    char albumPublishedDates[NUMBER_OF_ARTIST_MAX * 10][DATE_MAX_LEN] = {};
+    char albumIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {"alb1"}; // This so because every arist can have 10 albums on average. 
+    char albumOwnerIds[NUMBER_OF_ARTIST_MAX * 10][MAX_ID_LEN] = {"art0"};
+    char albumTitles[NUMBER_OF_ARTIST_MAX * 10][MAX_TITLE_LEN] = {"Baby"};
+    char albumFormats[NUMBER_OF_ARTIST_MAX * 10][MAX_FORMAT_LEN] ={"CD"};
+    char albumPublishedDates[NUMBER_OF_ARTIST_MAX * 10][DATE_MAX_LEN] = {"11/11/11"};
     //char dummy;
-    char albumPaths[1000][MAX_PATH_LEN];
+    char albumPaths[1000][MAX_PATH_LEN] = {"C:\\", "D:\\"};
     //cout <<"HI";testDeleteArtist();
     //cout << "nArtist " <<nArtist<<endl;
-
+    
+    nAlbum++;
+    nArtist++;
     welcome();
     loading(
 	              artistIds, 
@@ -47,8 +49,7 @@ int main(int argc, char** argv) {
 				  nArtist, 
 				  nAlbum
 	);
-	while(1){
-	  mainManager(
+    mainManager(
 	      artistIds, 
 	      artistNames, 
 	      artistGenders, 
@@ -62,8 +63,7 @@ int main(int argc, char** argv) {
 	      albumPaths,
           nArtist,
 	      nAlbum
-	  );
-    }
+	);
 	farewell ();
 	return(0);
 }
