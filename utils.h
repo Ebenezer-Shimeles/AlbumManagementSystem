@@ -674,6 +674,14 @@ void loadArtists(
 ){
 	
 	cout << "Loading artists\n";
+	sortArtist(
+         artistIds,
+         names,
+         genders,
+         phones,
+         emails,
+         nArtist
+   );
 }
 void loading(
             char artistIds[][8], 

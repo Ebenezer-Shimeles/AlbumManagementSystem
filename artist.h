@@ -9,6 +9,63 @@
 #include "Const.h"
 
 using namespace std;
+
+void sortArtist(
+              char artistIds[][8],
+              char names[][40],
+              char genders[],
+              char phones[][11],
+              char emails[][80],
+              int  nArtist
+                );
+
+
+void sortArtist(
+    char artistIds[][8],
+    char names[][40],
+    char genders[],
+    char phones[][11],
+    char emails[][80],
+    int  nArtist
+){
+
+   char tempartistIds[8] ={};
+   char tempnames[40] ={};
+   char tempgenders;
+   char tempphones[11] ={};
+   char tempemails[80] ={};
+   int i, j;
+
+    for(i=0;i<nArtist;i++)  
+    for(j=1; j<nArtist; j++)
+    {
+        if(stricmp(names[j-1], names[j])>0)
+        {
+            strcpy(tempnames, names[j-1]);
+            strcpy(names[j-1], names[j]);
+            strcpy(names[j], tempnames);
+
+
+            strcpy(tempartistIds, artistIds[j-1]);
+            strcpy(artistIds[j-1], artistIds[j]);
+            strcpy(artistIds[j], tempartistIds);
+
+            tempgenders = genders[j-1];
+            genders[j-1] =  genders[j];
+            genders[j] = tempgenders;
+
+            strcpy( tempemails,  emails[j-1]);
+            strcpy( emails[j-1],  emails[j]);
+            strcpy( emails[j], tempemails);
+
+            strcpy( tempphones,  phones[j-1]);
+            strcpy( phones[j-1],  phones[j]);
+            strcpy( phones[j], tempphones);            
+		}
+    }
+        
+}
+
 void removeArtist(
                   char artistIds[][8],
                   char  name[][40], 
@@ -560,6 +617,14 @@ bool addArtist(
 	strcpy(phones[nArtist], artistPhoneNumber);
 	strcpy(emails[nArtist], artistEmail);
 	nArtist++;
+	sortArtist(
+     artistIds,
+     names,
+     genders,
+     phones,
+     emails,
+     nArtist
+   );
 
 	 
 }
