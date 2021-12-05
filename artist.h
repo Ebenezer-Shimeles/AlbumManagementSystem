@@ -515,15 +515,16 @@ void getArtistInfo(
 	char &artistGender,
 	char artistPhoneNumber[PHONE_LEN_MAX], 
 	char artistEmail[MAX_EMAIL_LEN], int nArtist ){
-		
+	static unsigned int idN= 0;
 	strcpy(artistId, "art");
-	sprintf(artistId+3, "%d", nArtist);    
+	sprintf(artistId+3, "%d", idN);    
     //strcpy(artistId+3, to_string(nArtist).c_str() );
     
     getArtistName(artistName);
     artistGender = getArtistGender();
     getArtistPhone (artistPhoneNumber);
     getArtistEmail (artistEmail);
+    idN++;
 }
 bool addArtist(
            char artistIds[][8], 
@@ -653,6 +654,7 @@ bool editArtistInfo(
 	string tmp;
 	cout << endl <<"Enter '-' to skip editing field";
 	cout <<endl << "Input the new name please: ";
+	cin.ignore();
 	getline(cin, tmp);
 	strcpy(newName, tmp.c_str());
 	cout <<endl << "Input the new gender please: ";

@@ -7,13 +7,7 @@
       Written by Ebenezer Shimeles, Sued, Yeabsira and Selihom
 */
 
-/*
-"	artistIds, names, genders, phones, emails are arrays that contains the artist information in an array
-"	nArtist is the number of artist information currently existing in the arrays
-"	artistIdRefs, char albumIds, titles, recordFormat, datePublished, paths are arrays to be loaded with album information
-"	nAlbum is the number of albums information currently existing in the arrays 
 
-*/
 int nArtist=0, nAlbum=0;
 
 int main(int argc, char** argv) {
