@@ -211,8 +211,8 @@ bool addAlbum(
 	  char albumIds[][MAX_ID_LEN], 
 	  char titles[][80], 
 	  char recordFormats[][ MAX_FORMAT_LEN], 
-	  char datePublisheds[][11], 
-	  char paths[][100], 
+	  char datePublisheds[][DATE_MAX_LEN], 
+	  char paths[][MAX_PATH_LEN], 
 	  int & nAlbum
 ){
 	static int nId =0;
@@ -241,7 +241,7 @@ bool addAlbum(
 	
 	
 	
-	strcpy(artistIdsRef[selectedIdx- 1], artistIds[selectedIdx]);
+	strcpy(artistIdsRef[selectedIdx- 1], artistIds[selectedIdx -  1]);
 	char tmp[MAX_ID_LEN] = {};
 	sprintf(tmp, "alb%d", nId); //albums have alb* text 
 	strcpy(albumIds[selectedIdx - 1], tmp); 
@@ -252,6 +252,7 @@ bool addAlbum(
     nAlbum ++;
 	///getAlbumFormat(format);
 	nId++;
+	sortAlbum(artistIdsRef, albumIds, titles, recordFormats,datePublisheds, paths,  nAlbum);
 	return true;
 }
 void searchAlbumByArtistId(
@@ -268,10 +269,10 @@ void searchAlbumByArtistId(
 	memset(tmpStore, '\0', 8); //clear the junk
 	
 	for(int i=0;i<nAlbum;i++){
-		for(int j=0, k=0;j< MAX_ID_LEN;j++,k++){ //jump 3 because of 'art'  prefix
+		/*for(int j=0, k=0;j< MAX_ID_LEN;j++,k++){ //jump 3 because of 'art'  prefix
 			tmpStore[k] = artistIdsRefs[i][j];
-		//	cout <<tmpStore << " vs " <<targetId <<endl;
-            if(strcmp(tmpStore, targetId) == 0){
+	    	
+            if(stricmp(tmpStore, targetId) == 0){
             	//cout <<endl<<tmpStore<<" = "<<targetId << "i="<<i<<" j="<<j;
             	result[resLen] = i;
             	resLen++;
@@ -285,9 +286,17 @@ void searchAlbumByArtistId(
 		memset(tmpStore, '\0', 8);
 	
 		//cout <<" Relen: " <<resLen<<" " <<endl;
-		*noResult = resLen;
-		//cout <<" Relen ptr : " <<*noResult<<" " <<endl;
+	
+		//cout <<" Relen ptr : " <<*noResult<<" " <<endl;*/
+		cout << artistIdsRefs[i] << " vs " <<targetId <<endl;
+		if(stricmp(artistIdsRefs[i], targetId) == 0){
+			cout << "Found match " << artistIdsRefs[i] <<endl; 
+			result[resLen] = i;
+			resLen++;
+		}
 	}
+	*noResult = resLen;
+	
 }
 void searchArtistNameById(
           const char artistIds[][8], 
@@ -312,7 +321,7 @@ void displayOneAlbum(
 		  const char datePublisheds[], 
 		  const char paths[]
 ){
-     cout  << ") ID: " << albumIds << " Title: " <<titles << " Format: " <<recordFormats <<  " Date Published: " <<datePublisheds <<  " Paths: " <<paths <<endl;	
+     cout  << ") ID: " << albumIds << " Owner " << artistIdsRef<<" Title: " <<titles << " Format: " <<recordFormats <<  " Date Published: " <<datePublisheds <<  " Paths: " <<paths <<endl;	
 }
 void displayAllAlbum(
 		const char artistNames[][MAX_NAME_LEN], 
@@ -325,7 +334,7 @@ void displayAllAlbum(
 		int nAlbum
 ){
 	if(!nAlbum){
-		cerr << "No albums found!";
+		cerr << "No albums found!" <<endl;
 		return;
 	}
 	for(int i=0;i<nAlbum;i++){	 
@@ -446,6 +455,7 @@ void editAlbum(
 	    res2, 
         noResult
     );
+    if(selectedIdx == -1 )return;
     editAlbumInfo(
          artistIdsRef[selectedIdx - 1], 
 		  albumIds[selectedIdx - 1], 
@@ -454,5 +464,6 @@ void editAlbum(
 		  datePublisheds[selectedIdx - 1], 
 		  paths[selectedIdx - 1]
      );
+     sortAlbum(artistIdsRef, albumIds, titles, recordFormats, datePublisheds, paths, nAlbum);
 		
 }

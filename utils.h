@@ -14,27 +14,32 @@ void farewell (){
 	exit(0);
 }
 int viewArtistMenu(){
-	int choice = 100;
+	char choice;
 	cout << "Please choose one:";
 	cout << "\n\t1)Display All Artist\n\t2)View Artist By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
 	bool tmp;
 	do{
+		char c_choice[2];
 		cin >>choice;
-		tmp = choice >5 || choice < 1;
-		if(tmp) cerr << endl <<"Error in choice please retry" <<endl;
-	}while(tmp);
-	return choice;
+		sprintf(c_choice, "%c", choice);
+		//cout << c_choice;
+		tmp = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4';
+		if(!tmp) cerr << endl <<"Error in choice please retry" <<endl;
+	}while(!tmp);
+	return int(choice - '0');
 }
 int editAlbumMenu(){
 	cout << "Choose one please\n\t1)Add Artist Album\n\t2)Edit Artist Album\n\t3)Delete Artist Album\n\t4)Back To Main Menu\n\t5)Exit\nYour choice:";
-	int choice;
+	char choice;
+	char c_choice[2];
 	bool isValid = false;
 	do{
 		cin >> choice;
-		isValid = choice <=5 && choice >=1;
+		sprintf(c_choice, "%c", choice);
+		isValid = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4' || c_choice[0] == '5';
 		if(!isValid) cerr << "\nError in choice retry\a: ";
 	}while(!isValid);
-	return choice;
+	return int(choice - '0');
 }
 bool albumEditor(
          const char artistIds[][8], 
@@ -183,29 +188,33 @@ void viewArtistAlbumsBySearch(
     );
 }
 int albumMenu(){
-	int choice = 100;
+	char choice;
 	
 	cout << "\n\t1)View Artist Albums\n\t2)Edit Artist Album\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
 	bool tmp;
 	do{
+		char c_choice[2];
 		cin >> choice;
-	    tmp = choice > 4 || choice < 0;
-		if(tmp) cerr << "Error! in choice retry!\a\n";
-	}while(tmp);
-	return choice;
+		sprintf(c_choice, "%c", choice);
+	    tmp = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4';
+		if(!tmp) cerr << "Error! in choice retry!\a\n";
+	}while(!tmp);
+	return int(choice - '0');
 }
 
 int viewAlbumMenu(){
-	int choice = 100;
+	char choice;
     cout <<"Please choice one";
 	cout << "\n\t1)Display All Album\n\t2)View Album By Search\n\t3)Back To Main Menu\n\t4)Exit\nYour choice: ";
 	bool tmp;
 	do{
+		char c_choice[2];
 		cin >> choice;
-		tmp = choice > 4 || choice < 0;
-		if(tmp) cerr << "Error! in choice retry!\a\n";
-	}while(tmp);
-	return choice;
+		sprintf(c_choice, "%c", choice);
+	    tmp = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4';
+		if(!tmp) cerr << "Error! in choice retry!\a\n";
+	}while(!tmp);
+	return int(choice - '0');
 }
 bool albumViewer(
        const char artistIds[][8], 
@@ -326,16 +335,19 @@ bool albumManager(
 }
 
 int viewAlbMenu(){ //some
-	int choice;
+	char choice;
 	cout << "\n\t0)Add add artist\n\t1)Edit Artist2)\n\tDelete Artist3)\n\tBack To Main Menu\n\t4)Exit\nYour choice: ";
-	
+	bool isValid = false;
 	do{
+	    char c_choice[2];
 	   cin >>choice;
-	   if(choice > 4 || choice < 0) cerr <<endl<< "Error in choice  retry!"<<endl;
+	   sprintf(c_choice, "%c", choice);
+	   isValid = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4';
+	   if(!isValid) cerr <<endl<< "Error in choice  retry!"<<endl;
     }
-    while(choice > 4 || choice < 0);
+    while(!isValid);
 	
-	return choice;
+	return int(choice - '0');
 }
 void viewArtistBySearch(
           const char artistIds[][8], 
@@ -371,17 +383,23 @@ int mainMenu(){
 }
 
 int artistMenu(){
-	int choice = 100;
+	char choice;
 	cout << "Please choose one\n";
 	cout << "\t1)View Artist\n\t2)Edit Artist\n\t3)Back To Main Menu\n\t4)Exit\nYour choice:";
     bool isValid;
 	do{
-        
+        char c_choice[2] = {};
+    
     	cin>>choice;
-        isValid = choice <= 4 || choice >= 1;
-        if(!isValid) cerr<<endl<<"Error in input please reenter!\a:";
+    	sprintf(c_choice, "%c", choice);
+    	isValid = c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' || c_choice[0] == '4' ;
+        //isValid = choice <= 4 || choice >= 1;
+        if(!isValid){
+		  cerr<<endl<<"Error in input please rreenter!\a: " << c_choice;
+		  //cin.ignore();
+	    }
 	}while(!isValid);
-	return choice;
+	return int(choice - '0');
 }
 
 //Manages artist information
@@ -409,6 +427,7 @@ bool artistViewer(
 			   emails, 
 			   nArtist
        );
+       return true;
 	}
 	else if(choice == 2){
 		viewArtistBySearch(
@@ -419,25 +438,27 @@ bool artistViewer(
 		   emails, 
 		   nArtist
 		);
+		return true;
 
 	}
 	else if(choice == 3){
 		//system("cls");
-	    return false;
+	    return true;
 	}
-	else if(choice == 4) farewell();
+	else if(choice == 4) return false;
 }
 int editArtistMenu(){
-	int choice;
+	char choice;
 	cout << "\n\t0)Add artist\n\t1)Edit Artist\n\t2)Delete Artist\n\t3)Back To Main Menu\n\t4)Exit\nYour choice:";
 	bool isValid = false;
 	do{
-		
+		char c_choice[2];
 		cin >> choice;
-		isValid = choice <= 4 && choice >=0;
+		sprintf(c_choice, "%c", choice);
+	    isValid = c_choice[0] == '0' || c_choice[0] == '1' || c_choice[0] == '2' || c_choice[0] == '3' ||c_choice[0] == '4'  ;
 		if(!isValid) cerr << "Error in chooice please retry!\a:";
 	}while(!isValid);
-	return choice;
+	return int(choice - '0');
 }
 bool artistEditor(
          char artistIds[][8], 
@@ -492,12 +513,13 @@ bool artistEditor(
 				  nArtist, 
 				  nAlbum
        );
+       return true;
 	}
 	else if(choice == 3){
-		return false; //PLEASE FIX THIS
+		return true; //PLEASE FIX THIS
 	}
 	else if(choice == 4){
-		farewell();
+		return false;
 	}
 }
 
@@ -520,7 +542,7 @@ bool artistManager(
 	int choice = artistMenu();
 	if(choice == 1){
 		cout << "View Artist chooosen!" <<endl;
-		artistViewer(
+		return artistViewer(
            artistIds, 
 		   names,  
 		   genders, 
@@ -528,9 +550,10 @@ bool artistManager(
 		   emails, 
 		   nArtist
 		);
+		return true;
 	}
 	else if(choice == 2){
-		bool choice = artistEditor(
+		return artistEditor(
          artistIds, 
 		 names, 
 		 genders, 
@@ -545,14 +568,13 @@ bool artistManager(
 		 nArtist, 
 		 nAlbum
         );
-		if(!choice ) return false;
 	}
 	else if(choice == 3)
 	{
 		//system("cls");
-        return false;
+        return true;
 	}
-	else if(choice ==4) farewell();
+	else if(choice ==4) return false;
 }
 void mainManager(
     char artistIds[][8], 
@@ -586,7 +608,7 @@ void mainManager(
 	while(!isValid);
 	
 	if(choice == '1'){
-	   if(!artistManager(
+	   bool res= artistManager(
           artistIds, 
 	      names,
 	      genders,
@@ -600,8 +622,8 @@ void mainManager(
 	      paths,
 	      nArtist,
 	      nAlbum
-       )) 
-	   mainManager(
+       );
+	   if(res) mainManager(
             artistIds, 
 	        names, 
 	        genders, 
@@ -616,6 +638,7 @@ void mainManager(
             nArtist,
 	        nAlbum
       );
+      else return;
 	}
 	else if(choice == '2'){
 		bool choice = albumManager(
@@ -648,7 +671,7 @@ void mainManager(
 	        nAlbum
         );
 	   }
-	   else farewell();
+	   else return;
 	}
 	else if(choice == '3') return;
 }
