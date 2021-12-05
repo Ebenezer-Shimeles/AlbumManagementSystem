@@ -4,7 +4,7 @@
 #include "Const.h"
 #include "utils.h"
 /* 
-      Written by Ebenezer Shimeles, Sued, Yeabsira and Selihom
+      Written by Ebenezer Shimeles, Seud neuredin, Yeabsira Mekuria and Selihom Kidane
 */
 
 

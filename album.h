@@ -18,7 +18,11 @@ int selectAlbum(  const char artistIds[][MAX_ID_LEN],
 	int noResult
 ){
    int choice;
-   cout <<endl <<"Please select an album"<<endl;
+   if(!noResult){
+    cerr << "No albums  found!";
+    return -1;
+   }
+   cout <<endl <<"Please select an album ["<<noResult <<"]"<<endl;
    for(int i =0;i<noResult;i++){
    	cout <<i+1 << ")[ title: " << titles[i] << endl;
    }	
@@ -43,7 +47,7 @@ void deleteAlbum(
 			char paths[][100],
 		    int & nAlbum)
 {
-	int result[1000], noResult;
+	int result[1000] ={}, noResult=0;
 	searchArtist(
             artistIds, 
 			artistNames, 
@@ -51,6 +55,7 @@ void deleteAlbum(
 			result, 
 			&noResult
    );
+   cout << "Con: " << noResult;
    int selectedIdx = selectArtist(
         artistIds, 
 	    artistNames, 
@@ -58,19 +63,21 @@ void deleteAlbum(
 	    noResult, 
 	     0 
 	);
+	int result2[100] ={};
 	searchAlbumByArtistId(
               artistIdsRef, 
 			   nAlbum, 
-			   artistIds[selectedIdx], //must contain art 
-			   result,
+			   artistIds[result[selectedIdx - 1]], //must contain art 
+			   result2,
 			   &noResult
     );
     selectedIdx = selectAlbum(
 	    artistIds, 
 	    titles, 
-	    result, 
+	    result2, 
         noResult
     );
+    if(selectedIdx == -1) return;
     removeAlbum(
               artistIdsRef, 
 			  albumIds,
@@ -152,7 +159,7 @@ bool addAlbum(
 	  char paths[][100], 
 	  int & nAlbum
 ){
-	
+	static int nId =0;
 	int noResult=0, results[1000] ={};
 	searchArtist(
             artistIds, 
@@ -172,14 +179,14 @@ bool addAlbum(
 	char format[MAX_FORMAT_LEN] = {};
 	char datePublished[DATE_MAX_LEN] = {};
 	char path[MAX_PATH_LEN]= {};
-	cout <<"Here";
+	//cout <<"Here";
 	getAlbumInfo (albumTitle, format,  datePublished, path);
 	
 	
 	
 	strcpy(artistIdsRef[selectedIdx- 1], artistIds[selectedIdx]);
 	char tmp[MAX_ID_LEN] = {};
-	sprintf(tmp, "alb%d", nAlbum); //albums have alb* text 
+	sprintf(tmp, "alb%d", nId); //albums have alb* text 
 	strcpy(albumIds[selectedIdx - 1], tmp); 
 	strcpy(titles[selectedIdx - 1], albumTitle); 
 	strcpy(recordFormats[selectedIdx - 1], format); 
@@ -187,6 +194,7 @@ bool addAlbum(
 	strcpy(paths[selectedIdx - 1], path); 
     nAlbum ++;
 	///getAlbumFormat(format);
+	nId++;
 	return true;
 }
 void searchAlbumByArtistId(
@@ -247,7 +255,7 @@ void displayOneAlbum(
 		  const char datePublisheds[], 
 		  const char paths[]
 ){
-     cout  << ") Titlte: " <<titles << " Format: " <<recordFormats <<  " Date Published: " <<datePublisheds <<  " Paths: " <<paths <<endl;	
+     cout  << ") ID: " << albumIds << " Title: " <<titles << " Format: " <<recordFormats <<  " Date Published: " <<datePublisheds <<  " Paths: " <<paths <<endl;	
 }
 void displayAllAlbum(
 		const char artistNames[][MAX_NAME_LEN], 
@@ -296,7 +304,7 @@ void displayAllAlbums(
  		memset(name, '\0', 40);
  		searchArtistNameById(artistIdsRef, artistNames, name, artistIds, 1000);
         cout << "[";
-		cout <<" Owner's name: " << name << "  Owner's Id: " << artistIds << "  Album Id: " <<albumIds[i] << "  Title "<<titles[i];
+		cout << "  Album Id: " <<albumIds[i] <<" Owner's name: " << name << "  Owner's Id: " << artistIds << "  Title "<<titles[i];
 		cout <<"]"<<endl; 		
 	    res++;
 	 }
@@ -348,10 +356,10 @@ void editAlbum(
 	char recordFormats[][MAX_FORMAT_LEN], 
 	char datePublisheds[][DATE_MAX_LEN], 
 	char paths[][100], 
-	int nAlbum
+	int &nAlbum
 )
 {
-	int results[1000], noResult;
+	int results[1000]={}, noResult=0;
 	searchArtist(
             artistIds, 
 			artistNames, 
@@ -366,26 +374,27 @@ void editAlbum(
 	    noResult, 
 	     0 
 	);
+	int res2[1000]={};
 	searchAlbumByArtistId(
               artistIdsRef, 
 			   nAlbum, 
-			   artistIds[selectedIdx], //must contain art 
-			   results,
+			   artistIds[results[selectedIdx - 1]], //must contain art 
+			   res2,
 			   &noResult
     );
     selectedIdx = selectAlbum(
 	    artistIds, 
 	    titles, 
-	    results, 
+	    res2, 
         noResult
     );
     editAlbumInfo(
-         artistIdsRef[selectedIdx], 
-		  albumIds[selectedIdx], 
-		  titles[selectedIdx], 
-		   recordFormats[selectedIdx], 
-		  datePublisheds[selectedIdx], 
-		  paths[selectedIdx]
+         artistIdsRef[selectedIdx - 1], 
+		  albumIds[selectedIdx - 1], 
+		  titles[selectedIdx- 1], 
+		   recordFormats[selectedIdx - 1], 
+		  datePublisheds[selectedIdx - 1], 
+		  paths[selectedIdx - 1]
      );
 		
 }
