@@ -779,13 +779,13 @@ void editArtist(
   if(selected == -1) return;
   char g = 'A';
   editArtistInfo(
-               artistIds[selected - 1], 
-			   names[selected - 1],
+               artistIds[results[selected - 1]], 
+			   names[results[selected - 1]],
 			   
-			   genders[selected - 1], 
+			   genders[results[selected - 1]], 
 			   //genders[selected - 1], 
-			   phones[selected - 1 ], 
-			   emails[selected - 1]
+			   phones[results[selected - 1 ]], 
+			   emails[results[selected - 1]]
   );
   sortArtist(
     artistIds,
