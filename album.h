@@ -141,7 +141,7 @@ void deleteAlbum(
 			  recordFormats, 
 			  datePublisheds, 
 			  paths, nAlbum, 
-              selectedIdx
+              selectedIdx - 1
    );
 }
 void getAlbumPath (char albumPath[]){
@@ -240,15 +240,15 @@ bool addAlbum(
 	getAlbumInfo (albumTitle, format,  datePublished, path);
 	
 	
-	
-	strcpy(artistIdsRef[selectedIdx- 1], artistIds[selectedIdx -  1]);
+	cout <<endl <<endl <<"Adding Title: " <<albumTitle<< " format " << format <<endl <<endl; 
+	strcpy(artistIdsRef[nAlbum], artistIds[results[selectedIdx -  1]]);
 	char tmp[MAX_ID_LEN] = {};
 	sprintf(tmp, "alb%d", nId); //albums have alb* text 
-	strcpy(albumIds[selectedIdx - 1], tmp); 
-	strcpy(titles[selectedIdx - 1], albumTitle); 
-	strcpy(recordFormats[selectedIdx - 1], format); 
-	strcpy(datePublisheds[selectedIdx - 1], datePublished); 
-	strcpy(paths[selectedIdx - 1], path); 
+	strcpy(albumIds[nAlbum], tmp); 
+	strcpy(titles[nAlbum], albumTitle); 
+	strcpy(recordFormats[nAlbum], format); 
+	strcpy(datePublisheds[nAlbum], datePublished); 
+	strcpy(paths[nAlbum], path); 
     nAlbum ++;
 	///getAlbumFormat(format);
 	nId++;
@@ -263,7 +263,7 @@ void searchAlbumByArtistId(
 			   int * noResult
 ){
 	//char tmpStore[8]={};
-	cout << "Searching for " << targetId<<endl;
+	cout << "ID search Searching for " << targetId<<endl;
 	int resLen=0;
 	char tmpStore[8] ={};
 	memset(tmpStore, '\0', 8); //clear the junk
@@ -457,12 +457,12 @@ void editAlbum(
     );
     if(selectedIdx == -1 )return;
     editAlbumInfo(
-         artistIdsRef[selectedIdx - 1], 
-		  albumIds[selectedIdx - 1], 
-		  titles[selectedIdx- 1], 
-		   recordFormats[selectedIdx - 1], 
-		  datePublisheds[selectedIdx - 1], 
-		  paths[selectedIdx - 1]
+         artistIdsRef[res2[selectedIdx - 1]], 
+		  albumIds[res2[selectedIdx - 1]], 
+		  titles[res2[selectedIdx- 1]], 
+		   recordFormats[res2[selectedIdx - 1]], 
+		  datePublisheds[res2[selectedIdx - 1]], 
+		  paths[res2[selectedIdx - 1]]
      );
      sortAlbum(artistIdsRef, albumIds, titles, recordFormats, datePublisheds, paths, nAlbum);
 		

@@ -265,7 +265,7 @@ void deleteArtist(
 	}
 	//cout <<"HERE";
 	removeArtistAllAlbums(
-       artistIds[selectedIdx - 1], 
+       artistIds[result[selectedIdx - 1]], 
 	   artistIdsRefs, 
 	   albumIds, 
 	   titles, 
@@ -279,7 +279,7 @@ void deleteArtist(
 	    names, 
 	    phones,
 	    emails, 
-	    selectedIdx - 1, 
+	    result[selectedIdx - 1], 
 	    nArtist
 	);
 //	cout <<endl<<"Sure! "<<selectedIdx - 1;
@@ -298,51 +298,28 @@ void searchArtist(
 			int result[], 
 			int * noResult
 ){
-	char choice; 
-	cout << "Searching artist.."<<endl;
-	l:
-    cout << "Do you want to search by \nA)ID or B)Name:  ";
-    cin >> choice;
+	
+	cout << "Searching artist.. Input the keyword: "<<endl;
+
+    char tar[MAX_NAME_LEN] = {};
+    cin >>tar;
     int results[1000]; // This is where the results are stored
-    //int *numberOfResults;
-    if(choice == 'A' || choice == 'a'){
-    	//Search by Id
-    	char targetId[MAX_ID_LEN] = {};
-    	
-    	cout <<endl << "Input the id please: ";
-    	
-    	cin >>targetId;
-    	cout <<endl<< "The target ID is: "<<targetId<<endl;
-        //*noResult = 10;	
-    	//return;
-    	//all Fine
-    	searchArtistById(
+
+    if(tar[0] >='0' && tar[0] < '9') searchArtistById(
              artistIds, 
 			 nArtist, 
-			 targetId,  
+			 tar,  
 			 result, 
 			 noResult
-        );
-        //noResult[0] = 10004;
-        //cout << "Result length search: "<< *noResult << endl;
-        //cout <<"Wait please";
-	}
-	else if(choice == 'B' || choice == 'b'){
-		char targetName[MAX_NAME_LEN];
-		cout <<"Input the prefix name: ";
-		cin >>targetName;
-		searchArtistByName(
+    );
+
+	else searchArtistByName(
             names, 
 			nArtist, 
-			targetName,  
+			tar,  
 			result, 
 			noResult);
-	}
-	else{
-        cerr << "Error in choice!\a";
-        goto l;
-		//exit(-1);
-    }
+
     
 }
 void searchArtistById(
@@ -387,13 +364,14 @@ void searchArtistByName(
 			const char targetName[],  
 			int result[], 
 			int * noResult){
+			cout << "Searching by name" <<endl;
 	int resLen=0;
 	char tmpStore[8] = {};
 	for(int i=0;i<nArtist;i++){
 		for(int j=0;j<8;j++){
 			tmpStore[j] = names[i][j];
 			cout << tmpStore << " vs " << targetName <<endl;
-            if(strcmp(tmpStore, targetName) == 0){
+            if(stricmp(tmpStore, targetName) == 0){
             	//cout <<endl<<tmpStore<<" = "<<targetId << "i="<<i<<" j="<<j;
             	result[resLen] = i;
             	resLen++;
@@ -684,7 +662,7 @@ int selectArtist(
     if(forWhat == 0){
 	   cout <<"Please select a specific artist:"<<endl;
 	   for(int i=0;i<noResult;i++)
-	      cout << i + 1 << ") Name: " << names[i] << " Id " << artistIds[i] <<endl;
+	      cout << i + 1 << ") Name: " << names[result[i]] << " Id " << artistIds[result[i]] <<endl;
     }
 	else if(forWhat == 2) cout <<"Please select a specific artist to deleted: "<<endl;
     else if(forWhat == 1) cout << "Please select a specific artist to be edited: "<<endl;
@@ -881,24 +859,27 @@ void removeAlbum(
 	//memset(phone[selectedIdx], '\0', PHONE_LEN_MAX);
 	memset(paths[selectedIdx], '\0', MAX_PATH_LEN);
 	
-	if(selectedIdx + 1 == nAlbum) //deleting the last one
+	if(selectedIdx  == nAlbum) //deleting the last one
 	{
 		nAlbum--;
 	    return;  //no need to colapse
 	}
 	///if(selectedIdx + 1 == nArtist) return; //IF it is deleteing the last one
 	for(int i=selectedIdx;i<nAlbum;i++){ //colpase
-		    memset(artistIdsRef[selectedIdx], '\0', MAX_ID_LEN);
-	        memset(albumIds[selectedIdx], '\0', MAX_ID_LEN);
-	        memset(titles[selectedIdx], '\0',  MAX_TITLE_LEN);
-	        memset(datePublisheds[selectedIdx], '\0', DATE_MAX_LEN);
+		    memset(artistIdsRef[i], '\0', MAX_ID_LEN);
+	        memset(albumIds[i], '\0', MAX_ID_LEN);
+	        memset(titles[i], '\0',  MAX_TITLE_LEN);
+	        memset(datePublisheds[i], '\0', DATE_MAX_LEN);
 	//memset(phone[selectedIdx], '\0', PHONE_LEN_MAX);
-	        memset(paths[selectedIdx], '\0', MAX_PATH_LEN);
+	        memset(recordFormats[i], '\0', MAX_FORMAT_LEN);
+	        memset(paths[i], '\0', MAX_PATH_LEN);
 	
 		    strcpy(artistIdsRef[i], artistIdsRef[i+1]);
 		    strcpy(albumIds[i], albumIds[i+1]);
 		    strcpy(titles[i], titles[i+1]);
 		    strcpy(datePublisheds[i], datePublisheds[i+1]);
+		    strcpy(paths[i], paths[i + 1]);
+		    strcpy(recordFormats[i], recordFormats[i+1]);
 	}
     nAlbum--;
 }
