@@ -1,14 +1,22 @@
-#include <iostream>
-
-
 #include "Const.h"
-#include "utils.h"
+#include "io.h"
+
+
 /* 
       Written by Ebenezer Shimeles, Seud neuredin, Yeabsira Mekuria and Selihom Kidane
 */
 
 
+/*         
+           ----------------        --------------------       |----------------------|
+          |               |   <=   |                  |    <= |     Artist.h        |
+          |      User     |   =>   |      io.h        |    => |     Album.h         |
+          |---------------|        |------------------|       |---------------------|
+*/
+
+
 int nArtist=0, nAlbum=0;
+
 
 int main(int argc, char** argv) {
 	//int x = 100;rr
