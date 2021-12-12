@@ -145,7 +145,7 @@ void deleteAlbum(
    );
 }
 void formatAlbumPath(char albumFormat[]){
-	
+	if(!isupper(albumFormat[0])) albumFormat[0] -= 'a' -'A';
 }
 bool validateAlbumPath(const char path[]){
 	//ALbum must start with A->Z:\ no special char
@@ -191,6 +191,7 @@ void getAlbumPath (char albumPath[]){
 	   isValid = validateAlbumPath(albumPath);
 	   if(!isValid) cout << "Retry!: ";
     }while(!isValid);
+    formatAlbumPath(albumPath);
 }
 void formatAlbumFormat(char albumFormat[]){
 	for(int i=0;i<strlen(albumFormat);i++)
