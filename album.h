@@ -164,17 +164,19 @@ bool validateAlbumPath(const char path[]){
     for(i=3;i<strlen(path);i++){
     	for(int j=0;j<strlen(notAllowedChars);j++){
     		if(path[i] == notAllowedChars[j]){
-    			cerr <<  "Not allowed character!:\a \n"<< path[i];
+    			cerr <<  "Not allowed character!:\a error at =>"<< path[i]<<"\n"<< path[i];
+    			
     			return false;
 			}
-			else if(path[i] == '\\'){
-				if(lastSlash == true){
-					cerr << "Error empty directory name!\a";
-					return false;
-				} else lastSlash = true;
-			}
-			else lastSlash = false;
 		}
+		if(path[i] == '\\'){
+		    if(lastSlash == true){
+				cerr << "Error empty directory name!\a => " << i +1 <<"th character " <<  path[i]<< " ";
+				return false;
+			} //else lastSlash = true;
+			lastSlash = true;
+		}
+		else lastSlash = false;
 	}
 	if(i<3) return false;
 	return true;
@@ -257,7 +259,7 @@ bool validateAlbumDate(char date[10]){
     
 	cout <<"Day: " << dayS << " Month: " << month << " Year: " << year <<endl;
 
-	bool is = day < 31 && month < 12 && year < 2020 && day > 0 && month > 0 && year >0;
+	bool is = day <= 31 && month <= 12 && year < 2022 && day > 0 && month > 0 && year >0;
     if(!is) cerr << "Error this date in not valid\a retry!:  ";
     return is;
 }
