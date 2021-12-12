@@ -430,7 +430,7 @@ void getArtistEmail (char email[]){
 		cout <<endl << "Input the artist's email"<<endl;
 		cin >>artistEmail;
 	    isValid  = validateEmail(artistEmail);	
-	    if(!isValid) cerr<<endl<<"Invalid email!"<<endl;
+	    if(!isValid) cerr<<endl<<"Invalid email! \a"<<endl;
 	}
 	formatEmail(artistEmail);
 	strcpy(email, artistEmail);
@@ -440,9 +440,33 @@ void getArtistEmail (char email[]){
 
 bool validatePhone (const char phone[]){
 	//cout <<"Here";
-	if(strlen(phone ) > PHONE_LEN_MAX) return false;
-	for(int i=0;i<strlen(phone);i++){
-		if(!(phone[i] >= '0' && phone[i] <= '9')) return false;
+	char newPhone[10] = {};
+	
+	bool is251 = strncmp(phone,  "+251", 4) == 0;
+	bool is09 = strncmp(phone, "09", 2) == 0;
+	
+	if(!is251 && !is09){
+		cerr << "Please input a valid phone number!\a";
+		return false;
+	}
+	if(is251){ //Because the phone len max is 11 it can't accomadate +251 number so we fix it here
+		newPhone[0] = '0';
+		strcpy(newPhone+1, phone + 4);
+	}
+	else strcpy(newPhone, phone);
+	if(strlen(newPhone ) > PHONE_LEN_MAX) {
+	   cerr << "Error invalid phone len!\a";
+	   return false;
+    }
+    if(strlen(newPhone) != 10) {
+    	cerr << "Error please input a valid length!\a";
+    	return false;
+	}
+	for(int i=0;i<strlen(newPhone);i++){
+		if(!(newPhone[i] >= '0' && newPhone[i] <= '9')){
+		  cerr << "Invalid Phone! \a";
+		  return false; 
+		}
 	}
 	
 	return true;
@@ -452,13 +476,14 @@ bool validatePhone (const char phone[]){
 
 void getArtistPhone (char phone[]){
 	char phoneNumber[PHONE_LEN_MAX] = {};
+	cout <<endl <<"Please input phone number"<<endl;
 	bool isValid = false;
 	while(!isValid){
 	
-	    cout <<endl <<"Please input phone number"<<endl;
+	   
 	    cin>>phoneNumber;
 	    isValid = validatePhone(phoneNumber);
-	    if(!isValid) cerr << endl<<"Please input a valid  number";
+	    //if(!isValid) cerr << endl<<"Please input a valid  number";
     }
     strcpy(phone, phoneNumber);
 	
