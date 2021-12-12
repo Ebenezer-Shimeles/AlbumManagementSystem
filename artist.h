@@ -443,7 +443,7 @@ bool validatePhone (const char phone[]){
 	char newPhone[10] = {};
 	
 	bool is251 = strncmp(phone,  "+251", 4) == 0;
-	bool is09 = strncmp(phone, "09", 2) == 0;
+	bool is09 = strncmp(phone, "09", 2) == 0 || strncmp(phone, "011", 3) == 0;
 	
 	if(!is251 && !is09){
 		cerr << "Please input a valid phone number!\a";
@@ -485,7 +485,14 @@ void getArtistPhone (char phone[]){
 	    isValid = validatePhone(phoneNumber);
 	    //if(!isValid) cerr << endl<<"Please input a valid  number";
     }
-    strcpy(phone, phoneNumber);
+    bool is251 = strncmp(phoneNumber,  "+251", 4) == 0;
+    memset(phone, '\0', PHONE_LEN_MAX);
+    if(is251){
+    	cout << "HERE";
+    	phone[0] = '0';
+    	strcpy(phone + 1, phoneNumber + 4);
+	}
+	else strcpy(phone, phoneNumber);
 	
 }
 

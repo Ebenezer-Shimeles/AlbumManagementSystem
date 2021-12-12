@@ -144,9 +144,51 @@ void deleteAlbum(
               selectedIdx - 1
    );
 }
+void formatAlbumPath(char albumFormat[]){
+	
+}
+bool validateAlbumPath(const char path[]){
+	//ALbum must start with A->Z:\ no special char
+	
+	//https://en.wikipedia.org/wiki/Filename
+	if(!isalpha(path[0]) || path[1] != ':' || path[2] != '\\'){
+		cerr << "Error please input a valid drive!\a";
+		return false;
+	}
+	char notAllowedChars[] = {
+	  '/', '?', '%', '*', ':', '|', '"', '.', '>', '<', ',', ';', '=' };
+	
+    bool lastSlash = true;
+    
+    int i;
+    for(i=3;i<strlen(path);i++){
+    	for(int j=0;j<strlen(notAllowedChars);j++){
+    		if(path[i] == notAllowedChars[j]){
+    			cerr <<  "Not allowed character!:\a \n"<< path[i];
+    			return false;
+			}
+			else if(path[i] == '\\'){
+				if(lastSlash == true){
+					cerr << "Error empty directory name!\a";
+					return false;
+				} else lastSlash = true;
+			}
+			else lastSlash = false;
+		}
+	}
+	if(i<3) return false;
+	return true;
+}
 void getAlbumPath (char albumPath[]){
 	cout << "Get album path: ";
-	cin>>albumPath;
+	
+	bool isValid = false;
+	do{
+	
+	   cin>>albumPath;
+	   isValid = validateAlbumPath(albumPath);
+	   if(!isValid) cout << "Retry!: ";
+    }while(!isValid);
 }
 void formatAlbumFormat(char albumFormat[]){
 	for(int i=0;i<strlen(albumFormat);i++)
@@ -215,7 +257,9 @@ bool validateAlbumDate(char date[10]){
     
 	cout <<"Day: " << dayS << " Month: " << month << " Year: " << year <<endl;
 
-	return day < 31 && month < 12 && year < 2020 && day > 0 && month > 0 && year >0;
+	bool is = day < 31 && month < 12 && year < 2020 && day > 0 && month > 0 && year >0;
+    if(!is) cerr << "Error this date in not valid\a retry!:  ";
+    return is;
 }
 void getAlbumDate (char albumDate[10]){
 	// dd/mm/YYYY
