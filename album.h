@@ -170,10 +170,14 @@ void formatAlbumTitle (char albumTitle[]){
 	if(albumTitle[0] >= 'a') albumTitle[0] -= 'a' - 'A';
 }
 bool validateAlbumTitle (const char albumTitle[]){
-	for(int i =0;i<strlen(albumTitle);i++)
-	{
-		//if(!(albumTitle[i] >= 'a' && albumTitle[i] <= 'z') || !(albumTitle[i] >= 'A' && albumTitle[i] <= 'Z')) return false;
+    if(strlen(albumTitle) > MAX_TITLE_LEN){
+    	cerr << "This length is too much!\a Input a shorter one!";
+    	return false;
 	}
+	//for(int i =0;i<strlen(albumTitle);i++)
+	//{
+		//if(!(albumTitle[i] >= 'a' && albumTitle[i] <= 'z') || !(albumTitle[i] >= 'A' && albumTitle[i] <= 'Z')) return false;
+	//}
 	return true;
 }
 void getAlbumTitle (char title[]){
