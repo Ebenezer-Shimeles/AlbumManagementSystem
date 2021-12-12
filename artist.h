@@ -491,7 +491,7 @@ void getArtistPhone (char phone[]){
 
 
 bool validateGender( char gender){
-	return gender == 'F' || gender == 'M';
+	return gender == 'F' || gender == 'M' || gender == 'm' || gender == 'f';
 }
 
 
