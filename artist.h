@@ -409,7 +409,7 @@ bool validateEmail (const char email[]){
 		}
 	}
 	for(;i<strlen(email);i++, j++){
-		if(email[i] == '.' && j> 0){
+		if(email[i] == '.' && j> 1){
 		   hasDot = true;
 		   break;
 	    }  
@@ -668,8 +668,13 @@ int selectArtist(
     else if(forWhat == 1) cout << "Please select a specific artist to be edited: "<<endl;
 	cout <<endl;
 	int res;
-	cin>>res;
-	
+	bool isValid = false;
+	do{
+		
+	   cin>>res;
+	   isValid = res <= noResult && res > 0;
+	   if(!isValid ) cerr <<  "Please input a valid option!\a:\n";
+    }while(!isValid);
 	return res;
 }
 
