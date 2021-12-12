@@ -145,6 +145,7 @@ void deleteAlbum(
    );
 }
 void getAlbumPath (char albumPath[]){
+	cout << "Get album path: ";
 	cin>>albumPath;
 }
 void formatAlbumFormat(char albumFormat[]){
@@ -157,6 +158,7 @@ bool validateAlbumFormat (const char albumFormat[]){
 	return stricmp(albumFormat, "CD")  == 0|| stricmp(albumFormat, "DVD") == 0;
 }
 void getAlbumFormat(char format[MAX_FORMAT_LEN]){
+    cout << "Input Albums format: ";
 	bool isValid;
 	do{
 	
@@ -181,30 +183,62 @@ bool validateAlbumTitle (const char albumTitle[]){
 	return true;
 }
 void getAlbumTitle (char title[]){
+	cout << endl <<"Input Album title: "<<endl;
 	bool isValid;
 	do{
 	   cin >> title;
 	   isValid = validateAlbumTitle(title);
 	   if(!isValid) cerr <<endl << "Error in album title Renter correctly: "<<endl;
-	   if(strlen(title) > MAX_TITLE_LEN) cerr<< "TOO MUCH LENGTH!";
+	  // if(strlen(title) > MAX_TITLE_LEN) cerr<< "TOO MUCH LENGTH!";
     }while(!isValid || strlen(title) > MAX_TITLE_LEN);
     formatAlbumTitle(title);
 }
-bool validateAlbumDate(unsigned int day, unsigned int month, unsigned int year){
-	return day < 31 && month < 12 && year < 2020;
+bool validateAlbumDate(char date[10]){
+	unsigned int day,  month, year;
+	char dayS[3]={}, monthS[3] ={}, yearS[5]={};
+	
+	if(date[2] != '/' || date[5] != '/' || strlen(date) != 10){
+		cerr << "Error in date format!\a retry! in dd/mm/YYYY format: ";
+		return false;
+	}
+	//substr()
+	//substring(date, dayS, 0, 2);
+	//substring(date, monthS, 3, 2);
+	//substring(date, yearS, 6, 4);
+	memcpy(dayS, date, 2);
+	memcpy(monthS, date + 3, 2);
+	memcpy(yearS, date+6, 4);
+	
+    day = atoi(dayS);
+    month = atoi(monthS);
+    year = atoi(yearS);
+    
+	cout <<"Day: " << dayS << " Month: " << month << " Year: " << year <<endl;
+
+	return day < 31 && month < 12 && year < 2020 && day > 0 && month > 0 && year >0;
 }
-void getAlbumDate (char albumDate[]){
-	cin >> albumDate;
+void getAlbumDate (char albumDate[10]){
+	// dd/mm/YYYY
+	cout << "Input date in dd/mm/YYY format please: ";
+     char tempDate[10] = {};
+	bool isValid;
+	do{
+	  
+	   cin >> tempDate;
+	   isValid = validateAlbumDate(tempDate);
+    }while(!isValid);
+	strcpy(albumDate, tempDate);
+	//cin >> albumDate;
 }
 void getAlbumInfo (char titles[],char recordFormats[], char datePublished[], char paths[]){
     //cout << "HEre";
-    cout << endl <<"Input Album title: "<<endl;
+    
 	getAlbumTitle(titles);
-	cout << "Input Albums format: ";
+
 	getAlbumFormat(recordFormats);
-	cout << "Input album date: ";
+	
 	getAlbumDate (datePublished);
-	cout << "Get album path: ";
+
 	getAlbumPath(paths);
 }
 bool addAlbum(
